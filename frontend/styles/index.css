@@ -304,3 +304,219 @@ body {
 .auth-footer a:hover {
   text-decoration: underline;
 }
+
+.dashboard-wrapper {
+  width: 90%;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.welcome-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.welcome-card,
+.profile-mini-card,
+.dashboard-card,
+.offers-section {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.welcome-card {
+  padding: 40px;
+}
+
+.welcome-card h1 {
+  font-size: 2.6rem;
+  margin-bottom: 12px;
+  color: #0f172a;
+}
+
+.welcome-card p {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.profile-mini-card {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar,
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.profile-mini-card h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.profile-mini-card p {
+  margin-top: 8px;
+  color: #64748b;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.dashboard-card {
+  padding: 30px;
+}
+
+.dashboard-card h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #0f172a;
+  font-size: 1.5rem;
+}
+
+.info-list p {
+  margin: 12px 0;
+  font-size: 1.05rem;
+}
+
+.muted-text {
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.dashboard-btn {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 12px 20px;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dashboard-btn:hover {
+  background: #1d4ed8;
+}
+
+.secondary-btn {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.secondary-btn:hover {
+  background: #cbd5e1;
+}
+
+.danger-btn {
+  background: #dc2626;
+}
+
+.danger-btn:hover {
+  background: #b91c1c;
+}
+
+.file-input,
+.profile-input {
+  margin-top: 10px;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-form label {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.cv-actions,
+.photo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.offers-section {
+  padding: 30px;
+}
+
+.offers-section h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.offer-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.offer-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #0f172a;
+}
+
+.offer-card p {
+  margin: 6px 0;
+  color: #64748b;
+}
+
+@media (max-width: 992px) {
+  .welcome-section,
+  .dashboard-grid,
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-card h1 {
+    font-size: 2rem;
+  }
+}

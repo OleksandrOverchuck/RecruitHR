@@ -45,4 +45,7 @@ public class User {
 
     @Column(name = "cv_file_name")
     private String cvFileName;
+
+    @Column(name = "profile_image_name")
+    private String profileImageName;
 }
