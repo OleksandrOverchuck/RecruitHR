@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel użytkownika - HR Platform</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #111827;
+      }
+
+      .header {
+        background: #0f172a;
+        padding: 20px 0;
+      }
+
+      .navbar {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 30px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+        color: #93c5fd;
+      }
+
+      .dashboard-wrapper {
+        width: 90%;
+        max-width: 1200px;
+        margin: 40px auto;
+      }
+
+      .welcome-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        margin-bottom: 30px;
+      }
+
+      .welcome-card,
+      .profile-mini-card,
+      .dashboard-card,
+      .offers-section {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      }
+
+      .welcome-card {
+        padding: 40px;
+      }
+
+      .welcome-card h1 {
+        font-size: 2.6rem;
+        margin-bottom: 12px;
+        color: #0f172a;
+      }
+
+      .welcome-card p {
+        font-size: 1.1rem;
+        color: #64748b;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .profile-mini-card {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .profile-mini-card h3 {
+        margin: 0;
+        color: #0f172a;
+      }
+
+      .profile-mini-card p {
+        margin-top: 8px;
+        color: #64748b;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin-bottom: 30px;
+      }
+
+      .dashboard-card {
+        padding: 30px;
+      }
+
+      .dashboard-card h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #0f172a;
+        font-size: 1.5rem;
+      }
+
+      .info-list p {
+        margin: 12px 0;
+        font-size: 1.05rem;
+      }
+
+      .info-list strong {
+        color: #111827;
+      }
+
+      .muted-text {
+        color: #64748b;
+        line-height: 1.7;
+      }
+
+      .dashboard-btn {
+        display: inline-block;
+        margin-top: 18px;
+        padding: 12px 20px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .dashboard-btn:hover {
+        background: #1d4ed8;
+      }
+
+      .secondary-btn {
+        background: #e2e8f0;
+        color: #0f172a;
+      }
+
+      .secondary-btn:hover {
+        background: #cbd5e1;
+      }
+
+      .file-input {
+        margin-top: 10px;
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        background: #f8fafc;
+      }
+
+      .cv-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .offers-section {
+        padding: 30px;
+      }
+
+      .offers-section h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #0f172a;
+      }
+
+      .offers-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .offer-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 20px;
+      }
+
+      .offer-card h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #0f172a;
+      }
+
+      .offer-card p {
+        margin: 6px 0;
+        color: #64748b;
+      }
+
+      .footer {
+        background: #0f172a;
+        color: white;
+        text-align: center;
+        padding: 24px;
+        margin-top: 40px;
+      }
+
+      @media (max-width: 992px) {
+        .welcome-section {
+          grid-template-columns: 1fr;
+        }
+
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .offers-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 16px;
+        }
+
+        .welcome-card h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="logo">HR Platform</div>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="jobs.html">Oferty pracy</a></li>
+          <li><a href="user-dashboard.html">Mój panel</a></li>
+          <li><a href="#" id="logoutBtn">Wyloguj</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+      <section class="welcome-section">
+        <div class="welcome-card">
+          <h1>Witaj w panelu użytkownika</h1>
+          <p>
+            Zarządzaj swoim profilem, dodaj CV, przeglądaj oferty pracy i śledź
+            swoje aplikacje w jednym miejscu.
+          </p>
+        </div>
+
+        <div class="profile-mini-card">
+          <div class="avatar" id="userAvatar">U</div>
+          <h3 id="miniFullName">Użytkownik</h3>
+          <p id="miniRole">Konto użytkownika</p>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="dashboard-card">
+          <h2>Moje dane</h2>
+          <div class="info-list">
+            <p>
+              <strong>Imię i nazwisko:</strong>
+              <span id="fullName">Ładowanie...</span>
+            </p>
+            <p>
+              <strong>Email:</strong>
+              <span id="userEmail">Ładowanie...</span>
+            </p>
+            <p>
+              <strong>Rola:</strong>
+              <span id="userRole">Ładowanie...</span>
+            </p>
+          </div>
+          <button class="dashboard-btn" type="button">Edytuj profil</button>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Moje CV</h2>
+          <p class="muted-text" id="cvStatus">
+            Nie dodano jeszcze CV. Dodaj plik PDF, aby szybciej aplikować na
+            oferty pracy.
+          </p>
+
+          <input
+            type="file"
+            id="cvFileInput"
+            class="file-input"
+            accept="application/pdf"
+          />
+
+          <div class="cv-actions">
+            <button type="button" class="dashboard-btn" id="uploadCvBtn">
+              Dodaj CV
+            </button>
+
+            <a
+              href="#"
+              class="dashboard-btn secondary-btn"
+              id="downloadCvBtn"
+              style="display: none"
+            >
+              Pobierz CV
+            </a>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Moje aplikacje</h2>
+          <p class="muted-text">
+            Nie masz jeszcze aktywnych aplikacji. Przeglądaj oferty pracy i
+            aplikuj na stanowiska, które Cię interesują.
+          </p>
+          <button class="dashboard-btn secondary-btn" type="button">
+            Zobacz aplikacje
+          </button>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Szybkie akcje</h2>
+          <p class="muted-text">
+            Zaktualizuj profil, dodaj CV lub sprawdź najnowsze ogłoszenia
+            dostępne w systemie HR Platform.
+          </p>
+          <a href="jobs.html" class="dashboard-btn">Przeglądaj oferty</a>
+        </div>
+      </section>
+
+      <section class="offers-section">
+        <h2>Najnowsze oferty pracy</h2>
+        <div class="offers-grid">
+          <div class="offer-card">
+            <h3>Java Developer</h3>
+            <p>Lokalizacja: Kraków / Hybryda</p>
+            <p>Poziom: Mid</p>
+            <a href="jobs.html" class="dashboard-btn">Zobacz ofertę</a>
+          </div>
+
+          <div class="offer-card">
+            <h3>Frontend Developer</h3>
+            <p>Lokalizacja: Zdalnie</p>
+            <p>Poziom: Junior</p>
+            <a href="jobs.html" class="dashboard-btn">Zobacz ofertę</a>
+          </div>
+
+          <div class="offer-card">
+            <h3>HR Specialist</h3>
+            <p>Lokalizacja: Warszawa</p>
+            <p>Poziom: Mid</p>
+            <a href="jobs.html" class="dashboard-btn">Zobacz ofertę</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 HR Platform. Projekt systemu HR i rekrutacji.</p>
+    </footer>
+
+    <script src="../scripts/user-dashboard.js"></script>
+  </body>
+</html>

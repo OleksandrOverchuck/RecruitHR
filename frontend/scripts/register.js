@@ -36,13 +36,13 @@ registerForm.addEventListener("submit", async function (e) {
     const data = await response.json();
 
     if (response.ok) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("role", data.role);
+      alert(
+        "Konto zostało zarejestrowane. Za chwilę zostaniesz przeniesiony do logowania.",
+      );
 
-      alert("Rejestracja zakończona sukcesem");
-
-      window.location.href = "user-dashboard.html";
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1500);
     } else {
       alert(data.message || "Błąd rejestracji");
     }

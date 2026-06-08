@@ -44,35 +44,57 @@ body {
 }
 
 .hero {
-  min-height: 80vh;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(135deg, #1d4ed8, #2563eb, #3b82f6);
   color: white;
+  overflow: hidden;
+
+  background-image: url("../images/hr.png");
+  background-size: cover;
+  background-position: center 10%;
+  background-repeat: no-repeat;
 }
 
+/* półprzezroczysta warstwa */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(15, 23, 42, 0.65);
+
+  /* opcjonalnie dodatkowy gradient */
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.75),
+    rgba(29, 78, 216, 0.55)
+  );
+
+  z-index: 1;
+}
+
+/* tekst nad warstwą */
 .hero-text {
+  position: relative;
+  z-index: 2;
   max-width: 800px;
 }
 
 .hero h1 {
   font-size: 48px;
   margin-bottom: 20px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero p {
   font-size: 20px;
   margin-bottom: 30px;
-}
-
-.hero-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .btn {
@@ -87,6 +109,7 @@ body {
 .btn-primary {
   background: white;
   color: #1d4ed8;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .btn-primary:hover {
@@ -96,6 +119,8 @@ body {
 .btn-secondary {
   border: 2px solid white;
   color: white;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
 }
 
 .btn-secondary:hover {

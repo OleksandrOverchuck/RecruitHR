@@ -32,15 +32,9 @@ loginForm.addEventListener("submit", async function (e) {
 
       alert("Zalogowano pomyślnie");
 
-      if (data.role === "HR") {
-        window.location.href = "hr-dashboard.html";
-      } else if (data.role === "ADMIN") {
-        window.location.href = "admin-dashboard.html";
-      } else if (data.role === "EMPLOYEE") {
-        window.location.href = "employee-dashboard.html";
-      } else {
+      setTimeout(() => {
         window.location.href = "user-dashboard.html";
-      }
+      }, 1000);
     } else {
       alert(data.message || "Błąd logowania");
     }
