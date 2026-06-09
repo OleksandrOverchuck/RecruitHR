@@ -1,5 +1,10 @@
 package com.backend.service;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.backend.dto.AuthResponse;
 import com.backend.dto.LoginRequest;
 import com.backend.dto.RegisterRequest;
@@ -7,11 +12,8 @@ import com.backend.entity.Role;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 import com.backend.security.JwtService;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class AuthService {
         }
 
         User user = User.builder()
+                .indexNumber(generateIndexNumber())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
@@ -66,5 +69,10 @@ public class AuthService {
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .build();
+    }
+
+    private String generateIndexNumber() {
+        long count = userRepository.count() + 1;
+        return String.format("IDX%05d", count);
     }
 }

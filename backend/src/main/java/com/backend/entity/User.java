@@ -48,4 +48,7 @@ public class User {
 
     @Column(name = "profile_image_name")
     private String profileImageName;
+
+    @Column(nullable = false, unique = true)
+    private String indexNumber;
 }
