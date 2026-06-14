@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oferty pracy - HR Platform</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="logo">HR Platform</div>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="jobs.html">Oferty pracy</a></li>
+          <li><a href="login.html">Logowanie</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+      <section class="welcome-card" style="margin-bottom: 30px">
+        <h1>Oferty pracy</h1>
+        <p>
+          Przeglądaj wszystkie dostępne oferty pracy i aplikuj na stanowiska,
+          które Cię interesują.
+        </p>
+      </section>
+
+      <section class="offers-section">
+        <h2>Wszystkie oferty</h2>
+        <div class="offers-grid" id="allJobsList">
+          <p>Ładowanie ofert...</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 HR Platform. Projekt systemu HR i rekrutacji.</p>
+    </footer>
+    <script src="../scripts/navbar-anim.js"></script>
+    <script src="../scripts/jobs.js"></script>
+  </body>
+</html>

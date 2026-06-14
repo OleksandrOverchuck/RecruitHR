@@ -12,6 +12,7 @@
         <div class="logo">HR Platform - Admin</div>
         <ul class="nav-links">
           <li><a href="admin-dashboard.html">Panel admina</a></li>
+          <li><a href="change-password-admin.html">Zmień hasło</a></li>
           <li><a href="#" id="logoutBtn">Wyloguj</a></li>
         </ul>
       </nav>
@@ -34,41 +35,21 @@
           </button>
         </div>
 
-        <div id="usersList"></div>
-      </section>
-
-      <section class="dashboard-card">
-        <h2>Zmień hasło administratora</h2>
-        <form id="changePasswordForm" class="profile-form">
-          <div>
-            <label for="oldPassword">Stare hasło</label>
-            <input
-              type="password"
-              id="oldPassword"
-              class="profile-input"
-              required
-            />
-          </div>
-
-          <div>
-            <label for="newPassword">Nowe hasło</label>
-            <input
-              type="password"
-              id="newPassword"
-              class="profile-input"
-              required
-            />
-          </div>
-
-          <button type="submit" class="dashboard-btn">Zmień hasło</button>
-        </form>
+        <div
+          id="usersList"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+          "
+        ></div>
       </section>
     </main>
 
     <footer class="footer">
       <p>&copy; 2026 HR Platform</p>
     </footer>
-
+    <script src="../scripts/navbar-anim.js"></script>
     <script src="../scripts/admin-dashboard.js"></script>
   </body>
 </html>

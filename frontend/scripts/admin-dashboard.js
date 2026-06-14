@@ -63,8 +63,17 @@ async function loadUsers(query = "") {
       const userCard = document.createElement("div");
       userCard.className = "offer-card";
 
+      let profileImageHTML = `<div style="text-align: center; margin-bottom: 15px;">`;
+      if (user.profileImageName) {
+        profileImageHTML += `<img src="http://localhost:8080/api/users/${user.id}/photo" alt="${user.firstName} ${user.lastName}" class="profile-image" />`;
+      } else {
+        profileImageHTML += `<div class="profile-image">${user.firstName[0]}${user.lastName[0]}</div>`;
+      }
+      profileImageHTML += `</div>`;
+
       userCard.innerHTML = `
-        <h3>${user.firstName} ${user.lastName}</h3>
+        ${profileImageHTML}
+        <h3 style="text-align: center;">${user.firstName} ${user.lastName}</h3>
         <p><strong>Numer indeksu:</strong> ${user.indexNumber}</p>
         <p><strong>Email:</strong> ${user.email}</p>
         <p><strong>Aktualna rola:</strong> ${user.role}</p>
@@ -80,7 +89,7 @@ async function loadUsers(query = "") {
                 <option value="ADMIN" ${user.role === "ADMIN" ? "selected" : ""}>ADMIN</option>
               </select>
 
-              <button class="dashboard-btn" onclick="updateUserRole(${user.id})">
+              <button class="dashboard-btn" onclick="updateUserRole(${user.id})" style="width: 100%;">
                 Zmień rolę
               </button>
             `
@@ -125,45 +134,6 @@ async function updateUserRole(userId) {
     alert("Błąd połączenia z serwerem");
   }
 }
-
-document
-  .getElementById("changePasswordForm")
-  .addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const token = localStorage.getItem("token");
-    const oldPassword = document.getElementById("oldPassword").value;
-    const newPassword = document.getElementById("newPassword").value;
-
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/admin/change-password",
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            oldPassword,
-            newPassword,
-          }),
-        },
-      );
-
-      const result = await response.text();
-
-      if (response.ok) {
-        alert("Hasło zostało zmienione");
-        document.getElementById("changePasswordForm").reset();
-      } else {
-        alert(result || "Nie udało się zmienić hasła");
-      }
-    } catch (error) {
-      console.error("Błąd zmiany hasła:", error);
-      alert("Błąd połączenia z serwerem");
-    }
-  });
 
 document.getElementById("logoutBtn").addEventListener("click", function (e) {
   e.preventDefault();

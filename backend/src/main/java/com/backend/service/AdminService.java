@@ -1,17 +1,19 @@
 package com.backend.service;
 
+import java.util.List;
+
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.backend.dto.AdminUserResponse;
 import com.backend.dto.ChangePasswordRequest;
 import com.backend.dto.UpdateUserRoleRequest;
 import com.backend.entity.Role;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +42,7 @@ public class AdminService {
                         .lastName(user.getLastName())
                         .email(user.getEmail())
                         .role(user.getRole().name())
+                        .profileImageName(user.getProfileImageName())
                         .build())
                 .toList();
     }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Panel użytkownika - HR Platform</title>
+    <title>Panel HR - HR Platform</title>
     <link rel="stylesheet" href="../styles/index.css" />
   </head>
   <body>
@@ -12,8 +12,7 @@
         <div class="logo">HR Platform</div>
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
-          <li><a href="jobs.html">Oferty pracy</a></li>
-          <li><a href="user-dashboard.html">Mój panel</a></li>
+          <li><a href="hr-dashboard.html">Panel HR</a></li>
           <li><a href="change-password.html">Zmień hasło</a></li>
           <li><a href="#" id="logoutBtn">Wyloguj</a></li>
         </ul>
@@ -23,10 +22,10 @@
     <main class="dashboard-wrapper">
       <section class="welcome-section">
         <div class="welcome-card">
-          <h1>Witaj w panelu użytkownika</h1>
+          <h1>Witaj w panelu HR</h1>
           <p>
-            Zarządzaj swoim profilem, dodaj CV, zmień zdjęcie profilowe i
-            przeglądaj dostępne oferty pracy.
+            Zarządzaj swoim profilem, dodaj zdjęcie profilowe, twórz oferty
+            pracy, przeglądaj kandydatów i zatrudniaj użytkowników.
           </p>
         </div>
 
@@ -38,9 +37,9 @@
             alt="Zdjęcie profilowe"
             style="display: none"
           />
-          <div class="avatar" id="userAvatar">U</div>
-          <h3 id="miniFullName">Użytkownik</h3>
-          <p id="miniRole">Konto użytkownika</p>
+          <div class="avatar" id="userAvatar">HR</div>
+          <h3 id="miniFullName">Użytkownik HR</h3>
+          <p id="miniRole">Rola: HR</p>
         </div>
       </section>
 
@@ -102,36 +101,6 @@
         </div>
 
         <div class="dashboard-card">
-          <h2>Moje CV</h2>
-          <p class="muted-text" id="cvStatus">
-            Nie dodano jeszcze CV. Dodaj plik PDF, aby szybciej aplikować na
-            oferty pracy.
-          </p>
-
-          <input
-            type="file"
-            id="cvFileInput"
-            class="file-input"
-            accept="application/pdf"
-          />
-
-          <div class="cv-actions">
-            <button type="button" class="dashboard-btn" id="uploadCvBtn">
-              Dodaj CV
-            </button>
-
-            <a
-              href="#"
-              class="dashboard-btn secondary-btn"
-              id="downloadCvBtn"
-              style="display: none"
-            >
-              Pobierz CV
-            </a>
-          </div>
-        </div>
-
-        <div class="dashboard-card">
           <h2>Dane konta</h2>
           <div class="info-list">
             <p>
@@ -146,41 +115,81 @@
               <strong>Rola:</strong>
               <span id="roleText">Ładowanie...</span>
             </p>
+            <p>
+              <strong>Numer indeksu:</strong>
+              <span id="indexNumberText">Ładowanie...</span>
+            </p>
           </div>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Dodaj ofertę pracy</h2>
+          <form id="jobOfferForm" class="profile-form">
+            <div>
+              <label for="title">Tytuł stanowiska</label>
+              <input
+                type="text"
+                id="title"
+                class="profile-input"
+                placeholder="Np. Java Developer"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="location">Lokalizacja</label>
+              <input
+                type="text"
+                id="location"
+                class="profile-input"
+                placeholder="Np. Kraków / Zdalnie"
+              />
+            </div>
+
+            <div>
+              <label for="level">Poziom</label>
+              <input
+                type="text"
+                id="level"
+                class="profile-input"
+                placeholder="Np. Junior / Mid / Senior"
+              />
+            </div>
+
+            <div>
+              <label for="description">Opis</label>
+              <textarea
+                id="description"
+                class="profile-input"
+                rows="5"
+                placeholder="Wpisz opis oferty pracy"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="dashboard-btn">Dodaj ofertę</button>
+          </form>
         </div>
       </section>
 
       <section class="offers-section">
-        <h2>Najnowsze oferty pracy</h2>
-        <div class="offers-grid">
-          <div class="offer-card">
-            <h3>Java Developer</h3>
-            <p>Lokalizacja: Kraków / Hybryda</p>
-            <p>Poziom: Mid</p>
-            <a href="jobs.html" class="dashboard-btn">Zobacz ofertę</a>
-          </div>
+        <h2>Lista ofert pracy</h2>
+        <div id="jobOffersList" class="offers-grid">
+          <p>Ładowanie ofert...</p>
+        </div>
+      </section>
 
-          <div class="offer-card">
-            <h3>Frontend Developer</h3>
-            <p>Lokalizacja: Zdalnie</p>
-            <p>Poziom: Junior</p>
-            <a href="jobs.html" class="dashboard-btn">Zobacz ofertę</a>
-          </div>
-
-          <div class="offer-card">
-            <h3>HR Specialist</h3>
-            <p>Lokalizacja: Warszawa</p>
-            <p>Poziom: Mid</p>
-            <a href="jobs.html" class="dashboard-btn">Zobacz ofertę</a>
-          </div>
+      <section class="offers-section">
+        <h2>Aplikacje kandydatów</h2>
+        <div id="applicationsList" class="offers-grid">
+          <p>Ładowanie aplikacji...</p>
         </div>
       </section>
     </main>
 
     <footer class="footer">
-      <p>&copy; 2026 HR Platform. Projekt systemu HR i rekrutacji.</p>
+      <p>&copy; 2026 HR Platform. Panel HR.</p>
     </footer>
     <script src="../scripts/navbar-anim.js"></script>
-    <script src="../scripts/user-dashboard.js"></script>
+    <script src="../scripts/hr-dashboard.js"></script>
   </body>
 </html>

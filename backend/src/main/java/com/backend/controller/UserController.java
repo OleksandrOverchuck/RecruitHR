@@ -1,22 +1,41 @@
 package com.backend.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.backend.dto.ChangePasswordRequest;
 import com.backend.dto.UpdateProfileRequest;
 import com.backend.dto.UserResponse;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.*;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,9 +44,11 @@ import java.util.UUID;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private final String cvUploadDir = "uploads/cv";
-    private final String photoUploadDir = "uploads/photos";
+    private static final String UPLOADS_DIR = "uploads";
+    private final String cvUploadDir = UPLOADS_DIR + File.separator + "cv";
+    private final String photoUploadDir = UPLOADS_DIR + File.separator + "photos";
 
     @GetMapping("/me")
     public UserResponse getMe(Authentication authentication) {
@@ -45,6 +66,7 @@ public class UserController {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
+                .indexNumber(user.getIndexNumber())
                 .role(user.getRole().name())
                 .cvFileName(user.getCvFileName())
                 .profileImageName(user.getProfileImageName())
@@ -137,6 +159,56 @@ public class UserController {
         }
 
         return ResponseEntity.ok("Zdjęcie profilowe zostało usunięte");
+    }
+
+    @GetMapping("/{id}/photo")
+    public ResponseEntity<Resource> getUserProfilePhoto(@PathVariable Long id) throws MalformedURLException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Użytkownik nie znaleziony"));
+
+        if (user.getProfileImageName() == null || user.getProfileImageName().isBlank()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Path filePath = Paths.get(photoUploadDir).resolve(user.getProfileImageName());
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String fileName = user.getProfileImageName().toLowerCase();
+
+        MediaType mediaType = MediaType.IMAGE_JPEG;
+        if (fileName.endsWith(".png")) {
+            mediaType = MediaType.IMAGE_PNG;
+        }
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .body(resource);
+    }
+
+    @GetMapping("/{id}/cv")
+    public ResponseEntity<Resource> getUserCv(@PathVariable Long id) throws MalformedURLException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Użytkownik nie znaleziony"));
+
+        if (user.getCvFileName() == null || user.getCvFileName().isBlank()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Path filePath = Paths.get(cvUploadDir).resolve(user.getCvFileName());
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + user.getCvFileName() + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
     }
 
     @GetMapping("/me/photo")
@@ -239,5 +311,29 @@ public class UserController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + user.getCvFileName() + "\"")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        if (authentication == null || authentication.getName() == null) {
+            return ResponseEntity.status(401).body("Brak autoryzacji");
+        }
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Użytkownik nie znaleziony"));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            return ResponseEntity.badRequest().body("Nieprawidłowe stare hasło");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Hasło zostało zmienione");
     }
 }

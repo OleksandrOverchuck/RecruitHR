@@ -6,14 +6,18 @@
     <title>HR Platform</title>
     <link rel="stylesheet" href="../styles/index.css" />
   </head>
+
   <body>
     <header class="header">
       <nav class="navbar">
         <div class="logo">HR Platform</div>
-        <ul class="nav-links">
-          <li><a href="index.html">Start</a></li>
+
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#">Start</a></li>
           <li><a href="jobs.html">Oferty</a></li>
-          <li><a href="#about">Informacje</a></li>
+          <li><a href="about.html">Informacje</a></li>
           <li><a href="login.html">Logowanie</a></li>
         </ul>
       </nav>
@@ -23,44 +27,59 @@
       <section class="hero">
         <div class="hero-text">
           <h1>Nowoczesna platforma HR i rekrutacji</h1>
+
           <p>
             Zarządzaj ogłoszeniami o pracę, kandydatami, onboardingiem, urlopami
             i wynagrodzeniami w jednym systemie.
           </p>
+
           <div class="hero-buttons">
-            <a href="jobs.html" class="btn btn-primary">Zobacz oferty</a>
-            <a href="login.html" class="btn btn-secondary">Zaloguj się</a>
+            <a href="jobs.html" class="btn btn-primary"> Zobacz oferty </a>
+
+            <a href="login.html" class="btn btn-secondary"> Zaloguj się </a>
           </div>
         </div>
       </section>
 
       <section class="features" id="about">
         <h2>Główne moduły systemu</h2>
+
         <div class="cards">
           <div class="card">
             <h3>Rekrutacja</h3>
+
             <p>
               Publikuj ogłoszenia, zbieraj aplikacje i zarządzaj kandydatami.
             </p>
           </div>
+
           <div class="card">
             <h3>Kanban kandydatów</h3>
+
             <p>Śledź etapy rekrutacji od aplikacji aż do zatrudnienia.</p>
           </div>
+
           <div class="card">
             <h3>Onboarding</h3>
+
             <p>Twórz checklisty dla nowo zatrudnionych pracowników.</p>
           </div>
+
           <div class="card">
             <h3>Urlopy</h3>
+
             <p>Obsługuj wnioski urlopowe i nieobecności pracowników.</p>
           </div>
+
           <div class="card">
             <h3>Wynagrodzenia</h3>
+
             <p>Przeglądaj paski płacowe i historię wynagrodzeń.</p>
           </div>
+
           <div class="card">
             <h3>Raporty HR</h3>
+
             <p>Analizuj zatrudnienie, urlopy i aktywność rekrutacyjną.</p>
           </div>
         </div>
@@ -68,23 +87,159 @@
 
       <section class="process">
         <h2>Jak działa system?</h2>
+
         <div class="steps">
           <div class="step">
             <span>1</span>
             <p>Kandydat aplikuje na ofertę pracy.</p>
           </div>
+
           <div class="step">
             <span>2</span>
             <p>HR prowadzi proces rekrutacji i ocenia kandydata.</p>
           </div>
+
           <div class="step">
             <span>3</span>
             <p>Po zatrudnieniu system zakłada profil pracownika.</p>
           </div>
+
           <div class="step">
             <span>4</span>
             <p>Pracownik korzysta z modułu urlopów i wynagrodzeń.</p>
           </div>
+        </div>
+      </section>
+
+      <section class="stats">
+        <h2>HR Platform w liczbach</h2>
+
+        <div class="stats-grid">
+          <div class="stat">
+            <h3>500+</h3>
+            <p>opublikowanych ofert pracy</p>
+          </div>
+
+          <div class="stat">
+            <h3>1200+</h3>
+            <p>zarejestrowanych kandydatów</p>
+          </div>
+
+          <div class="stat">
+            <h3>150+</h3>
+            <p>firm korzystających z systemu</p>
+          </div>
+
+          <div class="stat">
+            <h3>98%</h3>
+            <p>zadowolonych użytkowników</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits">
+        <h2>Dlaczego warto korzystać z HR Platform?</h2>
+
+        <div class="cards">
+          <div class="card">
+            <h3>Oszczędność czasu</h3>
+
+            <p>
+              Automatyzacja procesów HR pozwala skupić się na pracy z ludźmi, a
+              nie na ręcznym zarządzaniu dokumentacją.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Wszystko w jednym miejscu</h3>
+
+            <p>
+              Rekrutacja, onboarding, urlopy oraz dane pracowników dostępne są z
+              poziomu jednego panelu.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Bezpieczeństwo danych</h3>
+
+            <p>
+              System zapewnia kontrolę dostępu i bezpieczne przechowywanie
+              informacji o pracownikach.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="testimonials">
+        <h2>Opinie użytkowników</h2>
+
+        <div class="cards">
+          <div class="card">
+            <p>
+              „Dzięki HR Platform skróciliśmy czas prowadzenia rekrutacji o
+              kilkadziesiąt procent.”
+            </p>
+
+            <strong>Anna, HR Manager</strong>
+          </div>
+
+          <div class="card">
+            <p>
+              „Przejrzysty interfejs i łatwe zarządzanie urlopami znacznie
+              usprawniły pracę naszego działu.”
+            </p>
+
+            <strong>Michał, Team Leader</strong>
+          </div>
+
+          <div class="card">
+            <p>
+              „Jedna aplikacja zastąpiła kilka różnych narzędzi używanych
+              wcześniej w firmie.”
+            </p>
+
+            <strong>Katarzyna, Specjalista HR</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq">
+        <h2>Najczęściej zadawane pytania</h2>
+
+        <div class="faq-item">
+          <h3>Czy system obsługuje proces rekrutacji?</h3>
+
+          <p>
+            Tak. Platforma umożliwia publikowanie ofert pracy, analizę
+            kandydatów oraz zarządzanie etapami rekrutacji.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Czy pracownicy mogą składać wnioski urlopowe?</h3>
+
+          <p>
+            Tak. Moduł urlopowy pozwala przesyłać i zatwierdzać wnioski online
+            bez konieczności używania papierowych formularzy.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Czy platforma działa w przeglądarce?</h3>
+
+          <p>
+            Tak. System jest dostępny jako aplikacja webowa i może być używany
+            na komputerach oraz urządzeniach mobilnych.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Czy dane pracowników są bezpieczne?</h3>
+
+          <p>
+            Tak. System wykorzystuje mechanizmy autoryzacji i kontroli dostępu,
+            aby chronić poufne informacje.
+          </p>
         </div>
       </section>
     </main>
@@ -92,5 +247,7 @@
     <footer class="footer">
       <p>&copy; 2026 HR Platform. Projekt systemu HR i rekrutacji.</p>
     </footer>
+    <script src="../scripts/navbar-anim.js"></script>
+    <script src="../scripts/mobile-menu.js"></script>
   </body>
 </html>

@@ -12,9 +12,23 @@ body {
 }
 
 .header {
-  background: #0f172a;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+
   color: white;
   padding: 20px 0;
+
+  transition: all 0.35s ease;
+}
+
+.header.scrolled {
+  padding: 12px 0;
+  background: rgba(15, 23, 42, 0.97);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
 .navbar {
@@ -24,6 +38,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .logo {
@@ -38,9 +53,46 @@ body {
 }
 
 .nav-links a {
+  position: relative;
   text-decoration: none;
   color: white;
   font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+
+  width: 0;
+  height: 2px;
+
+  background: white;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a:hover {
+  color: #dbeafe;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.1);
 }
 
 .hero {
@@ -56,7 +108,7 @@ body {
 
   background-image: url("../images/hr.png");
   background-size: cover;
-  background-position: center 10%;
+  background-position: center 2%;
   background-repeat: no-repeat;
 }
 
@@ -507,6 +559,106 @@ body {
   color: #64748b;
 }
 
+/* ===== Dodatkowe sekcje strony głównej ===== */
+
+.stats,
+.benefits,
+.testimonials,
+.faq {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 70px 0;
+}
+
+.stats h2,
+.benefits h2,
+.testimonials h2,
+.faq h2 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 40px;
+  color: #0f172a;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.stat {
+  background: white;
+  border-radius: 16px;
+  padding: 35px 20px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.stat h3 {
+  font-size: 42px;
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.stat p {
+  color: #64748b;
+}
+
+.testimonials .card {
+  text-align: center;
+}
+
+.testimonials .card p {
+  font-style: italic;
+  margin-bottom: 20px;
+  color: #475569;
+}
+
+.testimonials strong {
+  color: #0f172a;
+}
+
+.faq-item {
+  background: white;
+  border-radius: 16px;
+  padding: 25px 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.faq-item h3 {
+  color: #2563eb;
+  margin-bottom: 12px;
+}
+
+.faq-item p {
+  color: #64748b;
+  line-height: 1.7;
+}
+
+/* Admin Dashboard Styles */
+.offer-card .profile-image {
+  display: inline-flex;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  border: 3px solid #e2e8f0;
+}
+
+.offer-card p {
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
 @media (max-width: 992px) {
   .welcome-section,
   .dashboard-grid,
@@ -518,5 +670,52 @@ body {
 @media (max-width: 768px) {
   .welcome-card h1 {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    z-index: 1001;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    width: 100%;
+
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(12px);
+
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+
+    padding: 30px 0;
+
+    transform: translateY(-20px);
+    opacity: 0;
+    visibility: hidden;
+
+    transition: all 0.3s ease;
+  }
+
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 12px;
+    font-size: 18px;
   }
 }

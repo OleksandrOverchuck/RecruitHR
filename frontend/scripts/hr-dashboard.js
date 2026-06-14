@@ -1,16 +1,20 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  await loadUserProfile();
-  await loadLatestOffers();
-});
-
-async function loadUserProfile() {
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
 
-  if (!token) {
-    alert("Nie jesteś zalogowany");
+  if (!token || (role !== "HR" && role !== "ADMIN")) {
+    alert("Brak dostępu do panelu HR");
     window.location.href = "login.html";
     return;
   }
+
+  await loadHrProfile();
+  await loadJobOffers();
+  await loadApplications();
+});
+
+async function loadHrProfile() {
+  const token = localStorage.getItem("token");
 
   try {
     const response = await fetch("http://localhost:8080/api/users/me", {
@@ -34,12 +38,14 @@ async function loadUserProfile() {
     document.getElementById("fullName").textContent = fullName;
     document.getElementById("emailText").textContent = data.email;
     document.getElementById("roleText").textContent = data.role;
+    document.getElementById("indexNumberText").textContent =
+      data.indexNumber || "-";
 
     document.getElementById("editFirstName").value = data.firstName;
     document.getElementById("editLastName").value = data.lastName;
 
     document.getElementById("miniFullName").textContent = fullName;
-    document.getElementById("miniRole").textContent = data.role;
+    document.getElementById("miniRole").textContent = `Rola: ${data.role}`;
 
     const initials =
       (data.firstName?.charAt(0) || "") + (data.lastName?.charAt(0) || "");
@@ -58,17 +64,6 @@ async function loadUserProfile() {
       avatar.style.display = "flex";
       avatar.textContent = initials.toUpperCase();
       photoStatus.textContent = "Nie dodano jeszcze zdjęcia profilowego.";
-    }
-
-    const cvStatus = document.getElementById("cvStatus");
-    const downloadCvBtn = document.getElementById("downloadCvBtn");
-
-    if (data.cvFileName) {
-      cvStatus.textContent = `Dodane CV: ${data.cvFileName}`;
-      downloadCvBtn.style.display = "inline-block";
-    } else {
-      cvStatus.textContent = "Nie dodano jeszcze CV.";
-      downloadCvBtn.style.display = "none";
     }
   } catch (error) {
     console.error("Błąd:", error);
@@ -131,7 +126,7 @@ document
 
       if (response.ok) {
         alert("Profil został zaktualizowany");
-        await loadUserProfile();
+        await loadHrProfile();
       } else {
         alert(result || "Nie udało się zapisać zmian");
       }
@@ -176,7 +171,7 @@ document
       if (response.ok) {
         alert("Zdjęcie profilowe zostało zapisane");
         document.getElementById("photoFileInput").value = "";
-        await loadUserProfile();
+        await loadHrProfile();
       } else {
         alert(result || "Nie udało się przesłać zdjęcia");
       }
@@ -203,7 +198,7 @@ document
 
       if (response.ok) {
         alert("Zdjęcie profilowe zostało usunięte");
-        await loadUserProfile();
+        await loadHrProfile();
       } else {
         alert(result || "Nie udało się usunąć zdjęcia");
       }
@@ -214,99 +209,62 @@ document
   });
 
 document
-  .getElementById("uploadCvBtn")
-  .addEventListener("click", async function () {
-    const token = localStorage.getItem("token");
-    const fileInput = document.getElementById("cvFileInput");
-    const file = fileInput.files[0];
-
-    if (!file) {
-      alert("Wybierz plik PDF");
-      return;
-    }
-
-    if (file.type !== "application/pdf") {
-      alert("Możesz przesłać tylko plik PDF");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await fetch("http://localhost:8080/api/users/me/cv", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      const result = await response.text();
-
-      if (response.ok) {
-        alert("CV zostało dodane pomyślnie");
-        document.getElementById("cvFileInput").value = "";
-        await loadUserProfile();
-      } else {
-        alert(result || "Błąd podczas przesyłania CV");
-      }
-    } catch (error) {
-      console.error("Błąd uploadu CV:", error);
-      alert("Nie udało się przesłać CV");
-    }
-  });
-
-document
-  .getElementById("downloadCvBtn")
-  .addEventListener("click", async function (e) {
+  .getElementById("jobOfferForm")
+  .addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
 
+    const title = document.getElementById("title").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const level = document.getElementById("level").value.trim();
+    const description = document.getElementById("description").value.trim();
+
+    if (!title) {
+      alert("Tytuł stanowiska jest wymagany");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:8080/api/users/me/cv", {
-        method: "GET",
+      const response = await fetch("http://localhost:8080/api/hr/jobs", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          title,
+          location,
+          level,
+          description,
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error("Nie udało się pobrać CV");
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Oferta pracy została dodana");
+        document.getElementById("jobOfferForm").reset();
+        await loadJobOffers();
+      } else {
+        alert(data.message || "Nie udało się dodać oferty");
       }
-
-      const blob = await response.blob();
-
-      let fileName = "cv.pdf";
-      const disposition = response.headers.get("Content-Disposition");
-
-      if (disposition && disposition.includes("filename=")) {
-        fileName = disposition.split("filename=")[1].replace(/"/g, "").trim();
-      }
-
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Błąd pobierania CV:", error);
-      alert("Nie udało się pobrać CV");
+      console.error("Błąd dodawania oferty:", error);
+      alert("Nie udało się połączyć z serwerem");
     }
   });
 
-async function loadLatestOffers() {
-  const container = document.getElementById("latestOffersList");
-
-  if (!container) return;
+async function loadJobOffers() {
+  const token = localStorage.getItem("token");
+  const container = document.getElementById("jobOffersList");
 
   try {
-    const response = await fetch("http://localhost:8080/api/jobs", {
+    const response = await fetch("http://localhost:8080/api/hr/jobs", {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {
@@ -316,23 +274,22 @@ async function loadLatestOffers() {
     const offers = await response.json();
 
     if (!offers.length) {
-      container.innerHTML = "<p>Brak dostępnych ofert pracy.</p>";
+      container.innerHTML = "<p>Brak ofert pracy.</p>";
       return;
     }
 
     container.innerHTML = "";
 
-    const latestOffers = offers.slice(0, 3);
-
-    latestOffers.forEach((offer) => {
+    offers.forEach((offer) => {
       const offerCard = document.createElement("div");
       offerCard.className = "offer-card";
 
       offerCard.innerHTML = `
         <h3>${offer.title}</h3>
-        <p>Lokalizacja: ${offer.location || "-"}</p>
-        <p>Poziom: ${offer.level || "-"}</p>
-        <a href="jobs.html" class="dashboard-btn">Zobacz ofertę</a>
+        <p><strong>Lokalizacja:</strong> ${offer.location || "-"}</p>
+        <p><strong>Poziom:</strong> ${offer.level || "-"}</p>
+        <p><strong>Status:</strong> ${offer.active ? "Aktywna" : "Nieaktywna"}</p>
+        <p>${offer.description || "Brak opisu"}</p>
       `;
 
       container.appendChild(offerCard);
@@ -340,6 +297,103 @@ async function loadLatestOffers() {
   } catch (error) {
     console.error("Błąd ładowania ofert:", error);
     container.innerHTML = "<p>Nie udało się pobrać ofert pracy.</p>";
+  }
+}
+
+async function loadApplications() {
+  const token = localStorage.getItem("token");
+  const container = document.getElementById("applicationsList");
+
+  try {
+    const response = await fetch("http://localhost:8080/api/hr/applications", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Nie udało się pobrać aplikacji");
+    }
+
+    const applications = await response.json();
+
+    if (!applications.length) {
+      container.innerHTML = "<p>Brak aplikacji kandydatów.</p>";
+      return;
+    }
+
+    container.innerHTML = "";
+
+    applications.forEach((app) => {
+      const appCard = document.createElement("div");
+      appCard.className = "offer-card";
+
+      let profileImageHTML = `<div style="text-align: center; margin-bottom: 15px;">`;
+      if (app.profileImageName) {
+        profileImageHTML += `<img src="http://localhost:8080/api/users/${app.userId}/photo" alt="${app.firstName} ${app.lastName}" class="profile-image" />`;
+      } else {
+        profileImageHTML += `<div class="profile-image">${app.firstName[0]}${app.lastName[0]}</div>`;
+      }
+      profileImageHTML += `</div>`;
+
+      let cvLink = "-";
+      if (app.cvFileName) {
+        cvLink = `<a href="http://localhost:8080/api/users/${app.userId}/cv" target="_blank" style="color: #2563eb; text-decoration: underline;">Pobierz CV</a>`;
+      }
+
+      appCard.innerHTML = `
+        ${profileImageHTML}
+        <h3 style="text-align: center;">${app.firstName} ${app.lastName}</h3>
+        <p><strong>Numer indeksu:</strong> ${app.indexNumber || "-"}</p>
+        <p><strong>Email:</strong> ${app.email}</p>
+        <p><strong>CV:</strong> ${cvLink}</p>
+        <p><strong>Oferta:</strong> ${app.jobTitle}</p>
+        <p><strong>Status aplikacji:</strong> ${app.status}</p>
+        <p><strong>Data aplikacji:</strong> ${app.appliedAt}</p>
+        <button class="dashboard-btn" onclick="hireCandidate(${app.id})" style="width: 100%;">
+          Zatrudnij
+        </button>
+      `;
+
+      container.appendChild(appCard);
+    });
+  } catch (error) {
+    console.error("Błąd ładowania aplikacji:", error);
+    container.innerHTML = "<p>Nie udało się pobrać aplikacji.</p>";
+  }
+}
+
+async function hireCandidate(applicationId) {
+  const token = localStorage.getItem("token");
+
+  const confirmed = confirm("Czy na pewno chcesz zatrudnić tego kandydata?");
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/hr/applications/${applicationId}/hire`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const result = await response.text();
+
+    if (response.ok) {
+      alert("Kandydat został zatrudniony i otrzymał rolę EMPLOYEE");
+      await loadApplications();
+    } else {
+      alert(result || "Nie udało się zatrudnić kandydata");
+    }
+  } catch (error) {
+    console.error("Błąd zatrudniania kandydata:", error);
+    alert("Nie udało się połączyć z serwerem");
   }
 }
 
