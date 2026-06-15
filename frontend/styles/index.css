@@ -42,8 +42,26 @@ body {
 }
 
 .logo {
-  font-size: 26px;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.logo img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  max-width: 160px;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .nav-links {
@@ -259,44 +277,44 @@ body {
 }
 
 .auth-page {
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 140px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 20px;
   background: linear-gradient(135deg, #dbeafe, #eff6ff);
 }
 
 .auth-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 420px;
 }
 
 .auth-card {
   background: white;
   border-radius: 20px;
-  padding: 40px 32px;
+  padding: 24px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .auth-card h1 {
   text-align: center;
-  font-size: 36px;
-  margin-bottom: 10px;
+  font-size: 28px;
+  margin-bottom: 8px;
   color: #0f172a;
 }
 
 .auth-subtitle {
   text-align: center;
   color: #6b7280;
-  margin-bottom: 30px;
-  font-size: 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .form-group {
@@ -311,10 +329,10 @@ body {
 }
 
 .form-group input {
-  padding: 14px 16px;
+  padding: 10px 12px;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
   outline: none;
   transition: 0.3s ease;
 }
@@ -325,13 +343,13 @@ body {
 }
 
 .btn-submit {
-  margin-top: 10px;
-  padding: 14px;
+  margin-top: 8px;
+  padding: 12px;
   background: #2563eb;
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s ease;
@@ -343,7 +361,7 @@ body {
 
 .auth-footer {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 12px;
   color: #4b5563;
 }
 
@@ -557,6 +575,208 @@ body {
 .offer-card p {
   margin: 6px 0;
   color: #64748b;
+}
+
+/* Ensure cards can shrink inside the grid and long words wrap */
+.offer-card {
+  min-width: 0;
+}
+
+/* Limit description height and make it scrollable when very long */
+.offer-card p:last-of-type {
+  max-height: 96px;
+  overflow: auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Also ensure grid items don't cause horizontal overflow */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+/* Modal styles for full offer preview */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 820px;
+  max-height: calc(100vh - 80px);
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.35);
+}
+
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-description {
+  margin-top: 12px;
+  color: #334155;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow: auto;
+  max-height: calc(100vh - 240px);
+  padding-right: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.modal-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 820px) {
+  .modal-content {
+    max-width: 100%;
+  }
+}
+
+.application-card,
+.employee-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease;
+}
+
+.application-card:hover,
+.employee-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.application-header,
+.employee-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.application-header h3,
+.employee-header h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-applied {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-hired {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.application-info,
+.employee-info {
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.application-info p,
+.employee-info p {
+  margin: 8px 0;
+  color: #64748b;
+}
+
+.application-actions,
+.employee-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn-small:hover {
+  background: #1d4ed8;
+}
+
+.hire-btn {
+  background: #10b981;
+}
+
+.hire-btn:hover {
+  background: #059669;
+}
+
+.employee-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.employee-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1e40af;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 /* ===== Dodatkowe sekcje strony głównej ===== */

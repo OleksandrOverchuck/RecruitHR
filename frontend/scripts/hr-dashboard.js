@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   await loadHrProfile();
   await loadJobOffers();
-  await loadApplications();
 });
 
 async function loadHrProfile() {
@@ -297,103 +296,6 @@ async function loadJobOffers() {
   } catch (error) {
     console.error("Błąd ładowania ofert:", error);
     container.innerHTML = "<p>Nie udało się pobrać ofert pracy.</p>";
-  }
-}
-
-async function loadApplications() {
-  const token = localStorage.getItem("token");
-  const container = document.getElementById("applicationsList");
-
-  try {
-    const response = await fetch("http://localhost:8080/api/hr/applications", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Nie udało się pobrać aplikacji");
-    }
-
-    const applications = await response.json();
-
-    if (!applications.length) {
-      container.innerHTML = "<p>Brak aplikacji kandydatów.</p>";
-      return;
-    }
-
-    container.innerHTML = "";
-
-    applications.forEach((app) => {
-      const appCard = document.createElement("div");
-      appCard.className = "offer-card";
-
-      let profileImageHTML = `<div style="text-align: center; margin-bottom: 15px;">`;
-      if (app.profileImageName) {
-        profileImageHTML += `<img src="http://localhost:8080/api/users/${app.userId}/photo" alt="${app.firstName} ${app.lastName}" class="profile-image" />`;
-      } else {
-        profileImageHTML += `<div class="profile-image">${app.firstName[0]}${app.lastName[0]}</div>`;
-      }
-      profileImageHTML += `</div>`;
-
-      let cvLink = "-";
-      if (app.cvFileName) {
-        cvLink = `<a href="http://localhost:8080/api/users/${app.userId}/cv" target="_blank" style="color: #2563eb; text-decoration: underline;">Pobierz CV</a>`;
-      }
-
-      appCard.innerHTML = `
-        ${profileImageHTML}
-        <h3 style="text-align: center;">${app.firstName} ${app.lastName}</h3>
-        <p><strong>Numer indeksu:</strong> ${app.indexNumber || "-"}</p>
-        <p><strong>Email:</strong> ${app.email}</p>
-        <p><strong>CV:</strong> ${cvLink}</p>
-        <p><strong>Oferta:</strong> ${app.jobTitle}</p>
-        <p><strong>Status aplikacji:</strong> ${app.status}</p>
-        <p><strong>Data aplikacji:</strong> ${app.appliedAt}</p>
-        <button class="dashboard-btn" onclick="hireCandidate(${app.id})" style="width: 100%;">
-          Zatrudnij
-        </button>
-      `;
-
-      container.appendChild(appCard);
-    });
-  } catch (error) {
-    console.error("Błąd ładowania aplikacji:", error);
-    container.innerHTML = "<p>Nie udało się pobrać aplikacji.</p>";
-  }
-}
-
-async function hireCandidate(applicationId) {
-  const token = localStorage.getItem("token");
-
-  const confirmed = confirm("Czy na pewno chcesz zatrudnić tego kandydata?");
-  if (!confirmed) {
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      `http://localhost:8080/api/hr/applications/${applicationId}/hire`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-
-    const result = await response.text();
-
-    if (response.ok) {
-      alert("Kandydat został zatrudniony i otrzymał rolę EMPLOYEE");
-      await loadApplications();
-    } else {
-      alert(result || "Nie udało się zatrudnić kandydata");
-    }
-  } catch (error) {
-    console.error("Błąd zatrudniania kandydata:", error);
-    alert("Nie udało się połączyć z serwerem");
   }
 }
 

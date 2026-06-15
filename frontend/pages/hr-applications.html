@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplikacje kandydatów - HR Platform</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="logo">HR Platform</div>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="hr-dashboard.html">Panel HR</a></li>
+          <li><a href="hr-applications.html">Aplikacje</a></li>
+          <li><a href="hr-employees.html">Pracownicy</a></li>
+          <li><a href="change-password.html">Zmień hasło</a></li>
+          <li><a href="#" id="logoutBtn">Wyloguj</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+      <section class="welcome-section">
+        <div class="welcome-card">
+          <h1>Aplikacje kandydatów</h1>
+          <p>
+            Przeglądaj zgłoszenia kandydatów do dostępnych ofert pracy. Sprawdź
+            CV kandydatów i zatrudniaj najlepszych pracowników.
+          </p>
+        </div>
+      </section>
+
+      <section class="offers-section">
+        <h2>Lista aplikacji</h2>
+        <div id="applicationsList" class="offers-grid">
+          <p>Ładowanie aplikacji...</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 HR Platform. Aplikacje kandydatów.</p>
+    </footer>
+    <script src="../scripts/navbar-anim.js"></script>
+    <script src="../scripts/hr-applications.js"></script>
+  </body>
+</html>

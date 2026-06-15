@@ -31,11 +31,23 @@ async function loadAllJobs() {
         <h3>${offer.title}</h3>
         <p><strong>Lokalizacja:</strong> ${offer.location || "-"}</p>
         <p><strong>Poziom:</strong> ${offer.level || "-"}</p>
-        <p>${offer.description || "Brak opisu"}</p>
-        <button class="dashboard-btn" onclick="applyForJob(${offer.id})">
-          Aplikuj
-        </button>
+        <p class="offer-brief">${offer.description || "Brak opisu"}</p>
+        <button class="dashboard-btn offer-apply-btn">Aplikuj</button>
       `;
+
+      // open modal on card click (except when clicking apply button)
+      offerCard.addEventListener("click", (e) => {
+        if (e.target.closest(".offer-apply-btn")) return; // ignore clicks on apply button
+        openOfferModal(offer);
+      });
+
+      // handle apply button inside card
+      offerCard
+        .querySelector(".offer-apply-btn")
+        .addEventListener("click", (e) => {
+          e.stopPropagation();
+          applyForJob(offer.id);
+        });
 
       container.appendChild(offerCard);
     });
@@ -82,3 +94,36 @@ async function applyForJob(jobId) {
     alert("Nie udało się połączyć z serwerem");
   }
 }
+
+// --- Modal logic ---
+const modal = document.getElementById("offerModal");
+const modalClose = document.getElementById("modalClose");
+const modalTitle = document.getElementById("modalTitle");
+const modalMeta = document.getElementById("modalMeta");
+const modalDescription = document.getElementById("modalDescription");
+const modalApplyBtn = document.getElementById("modalApplyBtn");
+let currentModalJobId = null;
+
+function openOfferModal(offer) {
+  currentModalJobId = offer.id;
+  modalTitle.textContent = offer.title;
+  modalMeta.textContent = `Lokalizacja: ${offer.location || "-"} • Poziom: ${offer.level || "-"} `;
+  modalDescription.textContent = offer.description || "Brak opisu";
+  modal.style.display = "flex";
+  // attach apply handler
+  modalApplyBtn.onclick = () => applyForJob(offer.id);
+}
+
+function closeOfferModal() {
+  modal.style.display = "none";
+  currentModalJobId = null;
+}
+
+modalClose.addEventListener("click", closeOfferModal);
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) closeOfferModal();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && modal.style.display === "flex") closeOfferModal();
+});

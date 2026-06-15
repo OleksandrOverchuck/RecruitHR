@@ -9,7 +9,9 @@
   <body>
     <header class="header">
       <nav class="navbar">
-        <div class="logo">HR Platform</div>
+        <div class="logo">
+          <img src="../images/logo.png" alt="HR Platform" />
+        </div>
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
           <li><a href="jobs.html">Oferty pracy</a></li>
@@ -38,6 +40,18 @@
     <footer class="footer">
       <p>&copy; 2026 HR Platform. Projekt systemu HR i rekrutacji.</p>
     </footer>
+    <!-- Offer modal -->
+    <div id="offerModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <h2 id="modalTitle">Tytuł oferty</h2>
+        <p id="modalMeta" class="muted-text"></p>
+        <div id="modalDescription" class="modal-description"></div>
+        <div class="modal-actions">
+          <button id="modalApplyBtn" class="btn-submit">Aplikuj</button>
+        </div>
+      </div>
+    </div>
     <script src="../scripts/navbar-anim.js"></script>
     <script src="../scripts/jobs.js"></script>
   </body>
