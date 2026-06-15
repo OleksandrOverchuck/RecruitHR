@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.dto.AcceptJobApplicationRequest;
 import com.backend.dto.CreateJobOfferRequest;
 import com.backend.dto.JobApplicationResponse;
 import com.backend.dto.JobOfferResponse;
@@ -45,11 +46,14 @@ public class HrController {
         return ResponseEntity.ok(hrService.getAllApplications());
     }
 
-    @PostMapping("/applications/{id}/hire")
-    public ResponseEntity<String> hireCandidate(@PathVariable Long id) {
+    @PostMapping("/applications/{id}/accept")
+    public ResponseEntity<String> acceptCandidate(
+            @PathVariable Long id,
+            @Valid @RequestBody AcceptJobApplicationRequest request
+    ) {
         try {
-            hrService.hireCandidate(id);
-            return ResponseEntity.ok("Kandydat został zatrudniony i otrzymał rolę EMPLOYEE");
+            hrService.acceptCandidate(id, request);
+            return ResponseEntity.ok("Kandydat został zaakceptowany");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

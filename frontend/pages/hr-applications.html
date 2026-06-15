@@ -40,9 +40,41 @@
       </section>
     </main>
 
-    <footer class="footer">
-      <p>&copy; 2026 HR Platform. Aplikacje kandydatów.</p>
-    </footer>
+    <!-- Modal do akceptowania kandydata -->
+    <div id="acceptModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeAcceptModal()">&times;</span>
+        <h2>Akceptuj kandydata</h2>
+        <form id="acceptForm">
+          <div class="form-group">
+            <label for="candidateName">Kandydat:</label>
+            <input type="text" id="candidateName" readonly />
+          </div>
+          <div class="form-group">
+            <label for="position">Stanowisko:</label>
+            <input type="text" id="position" required />
+          </div>
+          <div class="form-group">
+            <label for="salary">Zarobki (PLN):</label>
+            <input type="number" id="salary" step="0.01" required />
+          </div>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeAcceptModal()"
+            >
+              Anuluj
+            </button>
+            <button type="button" class="btn-primary" onclick="generatePDF()">
+              Wygeneruj umowę PDF
+            </button>
+            <button type="submit" class="btn-primary">Akceptuj i zapisz</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script src="../scripts/navbar-anim.js"></script>
     <script src="../scripts/hr-applications.js"></script>
   </body>

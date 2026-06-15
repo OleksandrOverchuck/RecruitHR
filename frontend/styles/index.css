@@ -899,6 +899,120 @@ body {
     z-index: 1001;
   }
 
+  /* Modal styles for accept form */
+  #acceptModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+  }
+
+  #acceptModal.show {
+    display: flex;
+  }
+
+  #acceptModal .modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(2, 6, 23, 0.35);
+  }
+
+  .close-modal {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #64748b;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .close-modal:hover {
+    color: #0f172a;
+  }
+
+  #acceptModal h2 {
+    margin-bottom: 20px;
+    color: #0f172a;
+    font-size: 22px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0f172a;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  .form-actions button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-secondary {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  .btn-secondary:hover {
+    background: #e2e8f0;
+  }
+
   .nav-links {
     position: absolute;
     top: 100%;

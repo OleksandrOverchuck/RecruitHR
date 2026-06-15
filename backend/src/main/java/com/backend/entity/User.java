@@ -51,4 +51,14 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String indexNumber;
+
+    @Column(name = "position")
+    private String position;
+
+    @Column(name = "salary")
+    private Double salary;
+
+    @Column(name = "contract_signed", nullable = false)
+    @Builder.Default
+    private Boolean contractSigned = false;
 }

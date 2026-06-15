@@ -70,6 +70,9 @@ public class UserController {
                 .role(user.getRole().name())
                 .cvFileName(user.getCvFileName())
                 .profileImageName(user.getProfileImageName())
+                .position(user.getPosition())
+                .salary(user.getSalary())
+                .contractSigned(user.getContractSigned())
                 .build();
     }
 

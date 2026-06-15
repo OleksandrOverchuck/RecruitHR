@@ -14,4 +14,7 @@ public class UserResponse {
     private String role;
     private String cvFileName;
     private String profileImageName;
+    private String position;
+    private Double salary;
+    private Boolean contractSigned;
 }

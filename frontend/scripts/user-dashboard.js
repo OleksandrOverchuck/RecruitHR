@@ -70,6 +70,26 @@ async function loadUserProfile() {
       cvStatus.textContent = "Nie dodano jeszcze CV.";
       downloadCvBtn.style.display = "none";
     }
+
+    // Wyświetl informacje o zaakceptowaniu aplikacji
+    if (data.role === "EMPLOYEE" && data.position && data.salary) {
+      const acceptedCard = document.getElementById("acceptedApplicationCard");
+      acceptedCard.style.display = "block";
+      document.getElementById("acceptedPosition").textContent = data.position;
+      document.getElementById("acceptedSalary").textContent =
+        data.salary.toLocaleString("pl-PL", {
+          style: "decimal",
+          minimumFractionDigits: 2,
+        });
+
+      // Sprawdzenie czy umowa jest podpisana
+      if (data.contractSigned) {
+        document.getElementById("contractStatus").textContent = "Podpisana";
+      } else {
+        document.getElementById("contractStatus").textContent =
+          "Oczekuje na podpis";
+      }
+    }
   } catch (error) {
     console.error("Błąd:", error);
     alert("Sesja wygasła lub nie udało się pobrać danych użytkownika");

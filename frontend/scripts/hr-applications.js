@@ -3,6 +3,9 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 const API_BASE_URL = "http://localhost:8080/api";
 
+let currentApplicationId = null;
+let currentCandidateName = null;
+
 async function loadApplications() {
   try {
     const token = localStorage.getItem("token");
@@ -56,7 +59,7 @@ async function loadApplications() {
         </div>
         <div class="application-actions">
           ${app.cvFileName ? `<a href="${API_BASE_URL}/users/${app.userId}/cv" class="btn-small" download>Pobierz CV</a>` : ""}
-          <button class="btn-small hire-btn" onclick="hireCandidate(${app.id}, '${app.firstName} ${app.lastName}')">Zatrudnij</button>
+          <button class="btn-small hire-btn" onclick="openAcceptModal(${app.id}, '${app.firstName} ${app.lastName}')">Akceptuj</button>
         </div>
       </div>
     `,
@@ -69,21 +72,50 @@ async function loadApplications() {
   }
 }
 
-async function hireCandidate(applicationId, candidateName) {
-  if (!confirm(`Czy na pewno chcesz zatrudnić ${candidateName}?`)) {
+function openAcceptModal(applicationId, candidateName) {
+  currentApplicationId = applicationId;
+  currentCandidateName = candidateName;
+  document.getElementById("candidateName").value = candidateName;
+  document.getElementById("position").value = "";
+  document.getElementById("salary").value = "";
+  document.getElementById("acceptModal").style.display = "flex";
+}
+
+function closeAcceptModal() {
+  document.getElementById("acceptModal").style.display = "none";
+  currentApplicationId = null;
+  currentCandidateName = null;
+}
+
+function generatePDF() {
+  alert("Funkcja generowania PDF będzie dostępna w wersji .NET");
+}
+
+document.getElementById("acceptForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const position = document.getElementById("position").value.trim();
+  const salary = parseFloat(document.getElementById("salary").value);
+
+  if (!position || !salary) {
+    alert("Wszystkie pola są wymagane");
     return;
   }
 
   try {
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `${API_BASE_URL}/hr/applications/${applicationId}/hire`,
+      `${API_BASE_URL}/hr/applications/${currentApplicationId}/accept`,
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          position,
+          salary,
+        }),
       },
     );
 
@@ -92,13 +124,14 @@ async function hireCandidate(applicationId, candidateName) {
       throw new Error(error);
     }
 
-    alert("Kandydat został zatrudniony!");
+    alert("Kandydat został zaakceptowany!");
+    closeAcceptModal();
     loadApplications();
   } catch (error) {
     console.error("Błąd:", error);
-    alert("Błąd podczas zatrudniania kandydata: " + error.message);
+    alert("Błąd podczas akceptowania kandydata: " + error.message);
   }
-}
+});
 
 function logout() {
   localStorage.removeItem("token");

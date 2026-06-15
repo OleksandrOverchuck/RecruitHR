@@ -101,6 +101,50 @@
           </div>
         </div>
 
+        <div
+          class="dashboard-card"
+          id="acceptedApplicationCard"
+          style="display: none"
+        >
+          <h2>Zaakceptowana aplikacja</h2>
+          <div class="accepted-info">
+            <p
+              style="
+                color: #166534;
+                margin-bottom: 16px;
+                padding: 12px;
+                background: #dcfce7;
+                border-radius: 8px;
+                font-weight: 600;
+              "
+            >
+              ✓ Twoja aplikacja została zaakceptowana!
+            </p>
+            <p>
+              <strong>Stanowisko:</strong>
+              <span id="acceptedPosition">Ładowanie...</span>
+            </p>
+            <p>
+              <strong>Zarobki (PLN):</strong>
+              <span id="acceptedSalary">Ładowanie...</span>
+            </p>
+            <p>
+              <strong>Status umowy:</strong>
+              <span id="contractStatus">Oczekuje na podpis</span>
+            </p>
+            <div style="margin-top: 16px">
+              <button
+                type="button"
+                class="dashboard-btn"
+                id="signContractBtn"
+                style="display: none"
+              >
+                Podpisz umowę
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="dashboard-card">
           <h2>Moje CV</h2>
           <p class="muted-text" id="cvStatus">
@@ -176,10 +220,6 @@
         </div>
       </section>
     </main>
-
-    <footer class="footer">
-      <p>&copy; 2026 HR Platform. Projekt systemu HR i rekrutacji.</p>
-    </footer>
     <script src="../scripts/navbar-anim.js"></script>
     <script src="../scripts/user-dashboard.js"></script>
   </body>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.backend.dto.AcceptJobApplicationRequest;
 import com.backend.dto.CreateJobOfferRequest;
 import com.backend.dto.JobApplicationResponse;
 import com.backend.dto.JobOfferResponse;
@@ -82,7 +83,7 @@ public class HrService {
                 .toList();
     }
 
-    public void hireCandidate(Long applicationId) {
+    public void acceptCandidate(Long applicationId, AcceptJobApplicationRequest request) {
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Aplikacja nie istnieje"));
 
@@ -93,6 +94,9 @@ public class HrService {
         }
 
         user.setRole(Role.EMPLOYEE);
+        user.setPosition(request.getPosition());
+        user.setSalary(request.getSalary());
+        user.setContractSigned(false);
         application.setStatus(ApplicationStatus.HIRED);
 
         userRepository.save(user);
