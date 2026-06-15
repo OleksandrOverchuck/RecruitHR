@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rejestracja - HR Platform</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="logo">
+          <img src="../images/logo.png" alt="HR Platform" />
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="jobs.html">Oferty pracy</a></li>
+          <li><a href="index.html#about">O systemie</a></li>
+          <li><a href="login.html">Logowanie</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="auth-page">
+      <section class="auth-container">
+        <div class="auth-card">
+          <h1>Rejestracja</h1>
+          <form class="auth-form" id="registerForm">
+            <div class="form-group">
+              <label for="firstName">Imię</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                placeholder="Wpisz imię"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Nazwisko</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                placeholder="Wpisz nazwisko"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="registerEmail">Adres e-mail</label>
+              <input
+                type="email"
+                id="registerEmail"
+                name="email"
+                placeholder="Wpisz adres e-mail"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="registerPassword">Hasło</label>
+              <input
+                type="password"
+                id="registerPassword"
+                name="password"
+                placeholder="Utwórz hasło"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Potwierdź hasło</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Powtórz hasło"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn-submit">Zarejestruj się</button>
+          </form>
+
+          <div class="auth-footer">
+            <p>Masz już konto? <a href="login.html">Zaloguj się</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="../scripts/navbar-anim.js"></script>
+    <script src="../scripts/register.js"></script>
+  </body>
+</html>

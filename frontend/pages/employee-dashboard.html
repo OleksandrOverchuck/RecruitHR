@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel pracownika - HR Platform</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="logo">HR Platform</div>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="jobs.html">Oferty pracy</a></li>
+          <li><a href="employee-dashboard.html">Mój panel</a></li>
+          <li><a href="change-password.html">Zmień hasło</a></li>
+          <li><a href="#" id="logoutBtn">Wyloguj</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+      <section class="welcome-section">
+        <div class="welcome-card">
+          <h1>Witaj w panelu pracownika</h1>
+          <p>
+            Zarządzaj swoim profilem, przeglądaj swoje dane zatrudnienia i
+            informacje dotyczące stanowiska.
+          </p>
+        </div>
+
+        <div class="profile-mini-card">
+          <img
+            id="profileImagePreview"
+            class="profile-image"
+            src=""
+            alt="Zdjęcie profilowe"
+            style="display: none"
+          />
+          <div class="avatar" id="userAvatar">E</div>
+          <h3 id="miniFullName">Pracownik</h3>
+          <p id="miniRole">Pracownik - zatrudniony</p>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="dashboard-card">
+          <h2>Informacje pracownika</h2>
+          <div class="info-display">
+            <p>
+              <strong>Imię i nazwisko:</strong>
+              <span id="fullName">-</span>
+            </p>
+            <p>
+              <strong>Email:</strong>
+              <span id="emailText">-</span>
+            </p>
+            <p>
+              <strong>Numer indeksu:</strong>
+              <span id="indexNumber">-</span>
+            </p>
+            <p>
+              <strong>Status:</strong>
+              <span id="roleText">Pracownik</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Moje CV</h2>
+          <p class="muted-text" id="cvStatus">Nie dodano jeszcze CV.</p>
+          <button
+            id="downloadCvBtn"
+            class="dashboard-btn"
+            style="display: none"
+          >
+            Pobierz CV
+          </button>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Edycja profilu</h2>
+          <form class="profile-form" id="profileForm">
+            <div>
+              <label for="editFirstName">Imię</label>
+              <input
+                type="text"
+                id="editFirstName"
+                class="profile-input"
+                placeholder="Wpisz imię"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="editLastName">Nazwisko</label>
+              <input
+                type="text"
+                id="editLastName"
+                class="profile-input"
+                placeholder="Wpisz nazwisko"
+                required
+              />
+            </div>
+
+            <button type="submit" class="dashboard-btn">Zapisz zmiany</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="../scripts/navbar-anim.js"></script>
+    <script src="../scripts/employee-dashboard.js"></script>
+  </body>
+</html>

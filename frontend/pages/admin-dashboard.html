@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel administratora - HR Platform</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="logo">HR Platform - Admin</div>
+        <ul class="nav-links">
+          <li><a href="admin-dashboard.html">Panel admina</a></li>
+          <li><a href="change-password-admin.html">Zmień hasło</a></li>
+          <li><a href="#" id="logoutBtn">Wyloguj</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+      <section class="dashboard-card">
+        <h2>Użytkownicy systemu</h2>
+
+        <div style="margin-bottom: 20px">
+          <input
+            type="text"
+            id="searchInput"
+            class="profile-input"
+            placeholder="Szukaj po imieniu, nazwisku, emailu lub numerze indeksu"
+          />
+          <button id="searchBtn" class="dashboard-btn">Szukaj</button>
+          <button id="clearSearchBtn" class="dashboard-btn secondary-btn">
+            Wyczyść
+          </button>
+        </div>
+
+        <div
+          id="usersList"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+          "
+        ></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 HR Platform</p>
+    </footer>
+    <script src="../scripts/navbar-anim.js"></script>
+    <script src="../scripts/admin-dashboard.js"></script>
+  </body>
+</html>
