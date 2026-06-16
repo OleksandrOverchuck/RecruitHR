@@ -9,12 +9,17 @@
   <body>
     <header class="header">
       <nav class="navbar">
-        <div class="logo">HR Platform</div>
+        <div class="logo">
+          <img src="../images/logo.png" alt="Logo HR Platform" />
+        </div>
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
           <li><a href="hr-dashboard.html">Panel HR</a></li>
           <li><a href="hr-applications.html">Aplikacje</a></li>
+          <li><a href="hr-kanban.html">Kanban</a></li>
           <li><a href="hr-employees.html">Pracownicy</a></li>
+          <li><a href="hr-job-offers.html">Moje Oferty</a></li>
+          <li><a href="hr-job-offers-archive.html">Archiwum ofert</a></li>
           <li><a href="change-password.html">Zmień hasło</a></li>
           <li><a href="#" id="logoutBtn">Wyloguj</a></li>
         </ul>
@@ -50,14 +55,10 @@
             <label for="candidateName">Kandydat:</label>
             <input type="text" id="candidateName" readonly />
           </div>
-          <div class="form-group">
-            <label for="position">Stanowisko:</label>
-            <input type="text" id="position" required />
-          </div>
-          <div class="form-group">
-            <label for="salary">Zarobki (PLN):</label>
-            <input type="number" id="salary" step="0.01" required />
-          </div>
+          <p>
+            Po akceptacji kandydat trafi do tablicy Kanban, gdzie możesz
+            przesuwać go między etapami rekrutacji.
+          </p>
           <div class="form-actions">
             <button
               type="button"
@@ -66,10 +67,9 @@
             >
               Anuluj
             </button>
-            <button type="button" class="btn-primary" onclick="generatePDF()">
-              Wygeneruj umowę PDF
+            <button type="submit" class="btn-primary">
+              Akceptuj i przejdź do Kanban
             </button>
-            <button type="submit" class="btn-primary">Akceptuj i zapisz</button>
           </div>
         </form>
       </div>

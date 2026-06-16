@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.dto.AcceptJobApplicationRequest;
 import com.backend.dto.CreateJobOfferRequest;
 import com.backend.dto.JobApplicationResponse;
 import com.backend.dto.JobOfferResponse;
@@ -28,12 +28,16 @@ public class HrService {
     private final JobApplicationRepository jobApplicationRepository;
     private final UserRepository userRepository;
 
-    public JobOfferResponse createJobOffer(CreateJobOfferRequest request) {
+    public JobOfferResponse createJobOffer(CreateJobOfferRequest request, String hrEmail) {
+        User hrUser = userRepository.findByEmail(hrEmail)
+                .orElseThrow(() -> new RuntimeException("Użytkownik nie istnieje"));
+
         JobOffer jobOffer = JobOffer.builder()
                 .title(request.getTitle())
                 .location(request.getLocation())
                 .level(request.getLevel())
                 .description(request.getDescription())
+                .createdBy(hrUser)
                 .active(true)
                 .build();
 
@@ -46,20 +50,32 @@ public class HrService {
                 .level(jobOffer.getLevel())
                 .description(jobOffer.getDescription())
                 .active(jobOffer.isActive())
+                .ownerId(hrUser.getId())
+                .ownerEmail(hrUser.getEmail())
                 .build();
     }
 
     public List<JobOfferResponse> getAllJobOffers() {
         return jobOfferRepository.findAll()
                 .stream()
-                .map(job -> JobOfferResponse.builder()
-                        .id(job.getId())
-                        .title(job.getTitle())
-                        .location(job.getLocation())
-                        .level(job.getLevel())
-                        .description(job.getDescription())
-                        .active(job.isActive())
-                        .build())
+                .map(job -> {
+                    Long ownerId = null;
+                    String ownerEmail = null;
+                    if (job.getCreatedBy() != null) {
+                        ownerId = job.getCreatedBy().getId();
+                        ownerEmail = job.getCreatedBy().getEmail();
+                    }
+                    return JobOfferResponse.builder()
+                            .id(job.getId())
+                            .title(job.getTitle())
+                            .location(job.getLocation())
+                            .level(job.getLevel())
+                            .description(job.getDescription())
+                            .active(job.isActive())
+                            .ownerId(ownerId)
+                            .ownerEmail(ownerEmail)
+                            .build();
+                })
                 .toList();
     }
 
@@ -83,24 +99,114 @@ public class HrService {
                 .toList();
     }
 
-    public void acceptCandidate(Long applicationId, AcceptJobApplicationRequest request) {
+    public void acceptCandidate(Long applicationId) {
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Aplikacja nie istnieje"));
 
         User user = application.getUser();
 
         if (user.getRole() == Role.ADMIN) {
-            throw new RuntimeException("Nie można zatrudnić administratora");
+            throw new RuntimeException("Nie można zaakceptować administratora");
         }
 
-        user.setRole(Role.EMPLOYEE);
-        user.setPosition(request.getPosition());
-        user.setSalary(request.getSalary());
-        user.setContractSigned(false);
-        application.setStatus(ApplicationStatus.HIRED);
-
-        userRepository.save(user);
+        application.setStatus(ApplicationStatus.ACCEPTED);
         jobApplicationRepository.save(application);
+    }
+
+    public void updateApplicationStatus(Long applicationId, ApplicationStatus status) {
+        JobApplication application = jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Aplikacja nie istnieje"));
+
+        if (application.getStatus() == ApplicationStatus.REJECTED) {
+            throw new RuntimeException("Nie można zmienić statusu odrzuconej aplikacji");
+        }
+
+        if (status == ApplicationStatus.HIRED) {
+            User user = application.getUser();
+            if (user.getRole() != Role.EMPLOYEE) {
+                user.setRole(Role.EMPLOYEE);
+                userRepository.save(user);
+            }
+        }
+
+        application.setStatus(status);
+        jobApplicationRepository.save(application);
+    }
+
+    public void sendContract(Long applicationId) {
+        JobApplication application = jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Aplikacja nie istnieje"));
+
+        if (application.getStatus() != ApplicationStatus.CONTRACT_SIGNING) {
+            throw new RuntimeException("Umowę można wygenerować tylko dla kandydatów w etapie podpisania umowy");
+        }
+
+        // Tutaj można dodać rzeczywiste generowanie PDF i wysyłanie e-maila.
+    }
+
+    @Transactional
+    public void deleteJobOffer(Long jobOfferId, String hrEmail) {
+        JobOffer jobOffer = jobOfferRepository.findById(jobOfferId)
+                .orElseThrow(() -> new RuntimeException("Oferta pracy nie istnieje"));
+
+        if (!jobOffer.getCreatedBy().getEmail().equals(hrEmail)) {
+            throw new RuntimeException("Nie masz uprawnień do usunięcia tej oferty");
+        }
+
+        if (jobOffer.isActive()) {
+            throw new RuntimeException("Najpierw dezaktywuj ofertę, aby móc ją usunąć");
+        }
+
+        jobApplicationRepository.deleteByJobOfferId(jobOfferId);
+        jobOfferRepository.delete(jobOffer);
+    }
+
+    public void deactivateJobOffer(Long jobOfferId, String hrEmail) {
+        JobOffer jobOffer = jobOfferRepository.findById(jobOfferId)
+                .orElseThrow(() -> new RuntimeException("Oferta pracy nie istnieje"));
+
+        if (!jobOffer.getCreatedBy().getEmail().equals(hrEmail)) {
+            throw new RuntimeException("Nie masz uprawnień do dezaktywacji tej oferty");
+        }
+
+        if (!jobOffer.isActive()) {
+            throw new RuntimeException("Oferta jest już dezaktywowana");
+        }
+
+        jobOffer.setActive(false);
+        jobOfferRepository.save(jobOffer);
+    }
+
+    public void activateJobOffer(Long jobOfferId, String hrEmail) {
+        JobOffer jobOffer = jobOfferRepository.findById(jobOfferId)
+                .orElseThrow(() -> new RuntimeException("Oferta pracy nie istnieje"));
+
+        if (!jobOffer.getCreatedBy().getEmail().equals(hrEmail)) {
+            throw new RuntimeException("Nie masz uprawnień do aktywacji tej oferty");
+        }
+
+        if (jobOffer.isActive()) {
+            throw new RuntimeException("Oferta jest już aktywna");
+        }
+
+        jobOffer.setActive(true);
+        jobOfferRepository.save(jobOffer);
+    }
+
+    public void updateJobOffer(Long jobOfferId, CreateJobOfferRequest request, String hrEmail) {
+        JobOffer jobOffer = jobOfferRepository.findById(jobOfferId)
+                .orElseThrow(() -> new RuntimeException("Oferta pracy nie istnieje"));
+
+        if (!jobOffer.getCreatedBy().getEmail().equals(hrEmail)) {
+            throw new RuntimeException("Nie masz uprawnień do edycji tej oferty");
+        }
+
+        jobOffer.setTitle(request.getTitle());
+        jobOffer.setLocation(request.getLocation());
+        jobOffer.setLevel(request.getLevel());
+        jobOffer.setDescription(request.getDescription());
+
+        jobOfferRepository.save(jobOffer);
     }
 
     public void applyForJob(Long jobOfferId, String userEmail) {

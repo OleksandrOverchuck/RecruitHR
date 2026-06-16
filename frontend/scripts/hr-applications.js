@@ -32,9 +32,8 @@ async function loadApplications() {
 
     const applications = await response.json();
 
-    // Filtruj aplikacje gdzie status != HIRED
     const activeApplications = applications.filter(
-      (app) => app.status !== "HIRED",
+      (app) => app.status === "APPLIED" || app.status === "REVIEWING",
     );
 
     if (activeApplications.length === 0) {
@@ -76,8 +75,6 @@ function openAcceptModal(applicationId, candidateName) {
   currentApplicationId = applicationId;
   currentCandidateName = candidateName;
   document.getElementById("candidateName").value = candidateName;
-  document.getElementById("position").value = "";
-  document.getElementById("salary").value = "";
   document.getElementById("acceptModal").style.display = "flex";
 }
 
@@ -87,20 +84,8 @@ function closeAcceptModal() {
   currentCandidateName = null;
 }
 
-function generatePDF() {
-  alert("Funkcja generowania PDF będzie dostępna w wersji .NET");
-}
-
 document.getElementById("acceptForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  const position = document.getElementById("position").value.trim();
-  const salary = parseFloat(document.getElementById("salary").value);
-
-  if (!position || !salary) {
-    alert("Wszystkie pola są wymagane");
-    return;
-  }
 
   try {
     const token = localStorage.getItem("token");
@@ -110,12 +95,7 @@ document.getElementById("acceptForm").addEventListener("submit", async (e) => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          position,
-          salary,
-        }),
       },
     );
 
@@ -124,9 +104,9 @@ document.getElementById("acceptForm").addEventListener("submit", async (e) => {
       throw new Error(error);
     }
 
-    alert("Kandydat został zaakceptowany!");
+    alert("Kandydat został zaakceptowany i przesunięty do tablicy Kanban.");
     closeAcceptModal();
-    loadApplications();
+    window.location.href = "hr-kanban.html";
   } catch (error) {
     console.error("Błąd:", error);
     alert("Błąd podczas akceptowania kandydata: " + error.message);

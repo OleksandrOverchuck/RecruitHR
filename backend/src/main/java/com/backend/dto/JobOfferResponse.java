@@ -12,4 +12,6 @@ public class JobOfferResponse {
     private String level;
     private String description;
     private boolean active;
+    private Long ownerId;
+    private String ownerEmail;
 }

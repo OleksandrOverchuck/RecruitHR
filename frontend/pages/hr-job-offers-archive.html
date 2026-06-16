@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archiwum Ofert - HR Platform</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <div class="logo">
+          <img src="../images/logo.png" alt="Logo HR Platform" />
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html">Start</a></li>
+          <li><a href="hr-dashboard.html">Panel HR</a></li>
+          <li><a href="hr-applications.html">Aplikacje</a></li>
+          <li><a href="hr-kanban.html">Kanban</a></li>
+          <li><a href="hr-employees.html">Pracownicy</a></li>
+          <li><a href="hr-job-offers.html">Moje Oferty</a></li>
+          <li><a href="hr-job-offers-archive.html">Archiwum ofert</a></li>
+          <li><a href="change-password.html">Zmień hasło</a></li>
+          <li><a href="#" id="logoutBtn">Wyloguj</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+      <section class="welcome-section">
+        <div class="welcome-card">
+          <h1>Archiwum Ofert</h1>
+          <p>
+            Tutaj znajdziesz dezaktywowane oferty pracy. Tylko HR i
+            administratorzy mogą przeglądać i przywracać archiwalne oferty.
+          </p>
+        </div>
+      </section>
+
+      <section class="offers-section">
+        <h2>Zarchiwizowane oferty</h2>
+        <div id="archivedOffersList" class="offers-grid">
+          <p>Ładowanie archiwalnych ofert...</p>
+        </div>
+      </section>
+    </main>
+
+    <div id="archiveOfferDetailsModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" id="archiveCloseDetailsModal">&times;</span>
+        <h2 id="archiveDetailsTitle"></h2>
+        <div class="offer-details">
+          <p>
+            <strong>Lokalizacja:</strong>
+            <span id="archiveDetailsLocation"></span>
+          </p>
+          <p><strong>Poziom:</strong> <span id="archiveDetailsLevel"></span></p>
+          <p>
+            <strong>Status:</strong> <span id="archiveDetailsStatus"></span>
+          </p>
+          <p><strong>Opis:</strong></p>
+          <p id="archiveDetailsDescription" class="offer-description"></p>
+        </div>
+        <div class="offer-details-actions">
+          <button class="dashboard-btn" id="archiveDetailsEditBtn">
+            Edytuj
+          </button>
+          <button
+            class="dashboard-btn success-btn"
+            id="archiveDetailsActivateBtn"
+          >
+            Przywróć
+          </button>
+          <button class="dashboard-btn" id="archiveDetailsCloseBtn">
+            Zamknij
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/navbar-anim.js"></script>
+    <script src="../scripts/hr-job-offers-archive.js"></script>
+  </body>
+</html>

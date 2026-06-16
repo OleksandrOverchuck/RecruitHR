@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pracownicy - HR Platform</title>
+    <title>Kanban HR - HR Platform</title>
     <link rel="stylesheet" href="../styles/index.css" />
   </head>
   <body>
@@ -26,38 +26,35 @@
       </nav>
     </header>
 
-    <main class="dashboard-wrapper">
-      <section class="welcome-section">
-        <div class="welcome-card">
-          <h1>Lista zatrudnionych pracowników</h1>
-          <p>
-            Przeglądaj listę wszystkich pracowników zatrudnionych w systemie.
-            Sprawdź stanowiska, na które aplikowali pracownicy.
-          </p>
+    <main class="kanban-page">
+      <h1>Kanban rekrutacyjny</h1>
+      <p>
+        Przeciągnij kandydata między etapami, aby śledzić proces rekrutacji.
+      </p>
+      <div class="kanban-board">
+        <div class="kanban-column" data-status="ACCEPTED">
+          <h2>1. Akceptacja</h2>
+          <div class="kanban-column-body" id="acceptedColumn"></div>
         </div>
-      </section>
 
-      <section class="offers-section">
-        <h2>Pracownicy</h2>
-        <div class="search-row">
-          <input
-            type="text"
-            id="searchInput"
-            class="profile-input"
-            placeholder="Szukaj po imieniu lub numerze indeksu"
-          />
-          <button id="searchBtn" class="dashboard-btn">Szukaj</button>
-          <button id="clearSearchBtn" class="dashboard-btn secondary-btn">
-            Wyczyść
-          </button>
+        <div class="kanban-column" data-status="INTERVIEW">
+          <h2>2. Rozmowa rekrutacyjna</h2>
+          <div class="kanban-column-body" id="interviewColumn"></div>
         </div>
-        <div id="employeesList" class="offers-grid">
-          <p>Ładowanie pracowników...</p>
+
+        <div class="kanban-column" data-status="CONTRACT_SIGNING">
+          <h2>3. Podpisanie umowy</h2>
+          <div class="kanban-column-body" id="contractColumn"></div>
         </div>
-      </section>
+
+        <div class="kanban-column" data-status="HIRED">
+          <h2>4. Zatrudnienie</h2>
+          <div class="kanban-column-body" id="hiredColumn"></div>
+        </div>
+      </div>
     </main>
 
     <script src="../scripts/navbar-anim.js"></script>
-    <script src="../scripts/hr-employees.js"></script>
+    <script src="../scripts/hr-kanban.js"></script>
   </body>
 </html>
