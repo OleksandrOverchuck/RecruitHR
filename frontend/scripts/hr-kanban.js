@@ -64,8 +64,17 @@ async function loadKanban() {
         <h3>${app.firstName} ${app.lastName}</h3>
         <p>${app.email}</p>
         <span class="kanban-status status-${app.status.toLowerCase()}">${app.status.replace("_", " ")}</span>
-        <div class="card-actions">
-          ${app.status === "CONTRACT_SIGNING" ? `<button class="btn-small" onclick="sendContract(${app.id})">Generuj umowę</button>` : ""}
+        ${app.contractSent ? '<span style="color:#0f766e; font-weight:700; display:block; margin-top:8px;">📄 Umowa wysłana</span>' : ""}
+        ${app.contractSigned ? '<span style="color:#166534; font-weight:700; display:block; margin-top:8px;">✔ Umowa podpisana</span>' : ""}
+        <div class="card-actions" style="display:flex; flex-direction:column; gap:8px;">
+          ${
+            app.status === "CONTRACT_SIGNING"
+              ? `
+            <input type="file" accept="application/pdf" id="contractFileInput_${app.id}" style="font-size:12px;" />
+            <button class="btn-small" onclick="uploadContract(${app.id})">Załącz umowę</button>
+          `
+              : ""
+          }
         </div>
       `;
 
@@ -145,9 +154,27 @@ async function updateApplicationStatus(applicationId, status) {
   }
 }
 
-async function sendContract(applicationId) {
+async function uploadContract(applicationId) {
   try {
     const token = localStorage.getItem("token");
+    const fileInput = document.getElementById(
+      `contractFileInput_${applicationId}`,
+    );
+
+    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+      alert("Wybierz plik PDF z umową.");
+      return;
+    }
+
+    const file = fileInput.files[0];
+    if (file.type !== "application/pdf") {
+      alert("Dozwolony jest tylko plik PDF.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
     const response = await fetch(
       `${API_BASE_URL}/hr/applications/${applicationId}/contract`,
       {
@@ -155,6 +182,7 @@ async function sendContract(applicationId) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        body: formData,
       },
     );
 
@@ -163,11 +191,11 @@ async function sendContract(applicationId) {
       throw new Error(error);
     }
 
-    alert("Umowa została wygenerowana i wysłana do użytkownika.");
+    alert("Umowa została przesłana do użytkownika.");
     await loadKanban();
   } catch (error) {
     console.error("Błąd:", error);
-    alert("Błąd podczas generowania umowy: " + error.message);
+    alert("Błąd podczas przesyłania umowy: " + error.message);
   }
 }
 

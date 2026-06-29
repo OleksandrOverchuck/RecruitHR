@@ -58,6 +58,13 @@ public class User {
     @Column(name = "salary")
     private Double salary;
 
+    @Column(name = "contract_file_name")
+    private String contractFileName;
+
+    @Column(name = "contract_sent", nullable = false)
+    @Builder.Default
+    private Boolean contractSent = false;
+
     @Column(name = "contract_signed", nullable = false)
     @Builder.Default
     private Boolean contractSigned = false;

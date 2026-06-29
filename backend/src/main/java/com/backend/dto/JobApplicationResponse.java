@@ -17,5 +17,7 @@ public class JobApplicationResponse {
     private Long jobOfferId;
     private String jobTitle;
     private String status;
+    private Boolean contractSent;
+    private Boolean contractSigned;
     private String appliedAt;
 }

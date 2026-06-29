@@ -1,10 +1,17 @@
 package com.backend.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.dto.CreateJobOfferRequest;
 import com.backend.dto.JobApplicationResponse;
@@ -27,6 +34,7 @@ public class HrService {
     private final JobOfferRepository jobOfferRepository;
     private final JobApplicationRepository jobApplicationRepository;
     private final UserRepository userRepository;
+    private final ContractService contractService;
 
     public JobOfferResponse createJobOffer(CreateJobOfferRequest request, String hrEmail) {
         User hrUser = userRepository.findByEmail(hrEmail)
@@ -94,6 +102,8 @@ public class HrService {
                         .jobOfferId(app.getJobOffer().getId())
                         .jobTitle(app.getJobOffer().getTitle())
                         .status(app.getStatus().name())
+                        .contractSent(app.getUser().getContractSent())
+                        .contractSigned(app.getUser().getContractSigned())
                         .appliedAt(app.getAppliedAt().toString())
                         .build())
                 .toList();
@@ -133,15 +143,41 @@ public class HrService {
         jobApplicationRepository.save(application);
     }
 
-    public void sendContract(Long applicationId) {
+    public void sendContract(Long applicationId, MultipartFile file) {
         JobApplication application = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Aplikacja nie istnieje"));
 
         if (application.getStatus() != ApplicationStatus.CONTRACT_SIGNING) {
-            throw new RuntimeException("Umowę można wygenerować tylko dla kandydatów w etapie podpisania umowy");
+            throw new RuntimeException("Umowę można załączyć tylko dla kandydatów w etapie podpisania umowy");
         }
 
-        // Tutaj można dodać rzeczywiste generowanie PDF i wysyłanie e-maila.
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("Nie wybrano pliku umowy");
+        }
+
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null || !originalFileName.toLowerCase().endsWith(".pdf")) {
+            throw new RuntimeException("Dozwolony jest tylko plik PDF");
+        }
+
+        try {
+            Path uploadPath = Paths.get(contractService.getStorageDirectory());
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String uniqueFileName = UUID.randomUUID() + "_" + originalFileName;
+            Path targetPath = uploadPath.resolve(uniqueFileName);
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+            User user = application.getUser();
+            user.setContractFileName(uniqueFileName);
+            user.setContractSent(true);
+            user.setContractSigned(false);
+            userRepository.save(user);
+        } catch (IOException e) {
+            throw new RuntimeException("Nie udało się zapisać pliku umowy", e);
+        }
     }
 
     @Transactional
