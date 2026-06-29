@@ -3,6 +3,9 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 const API_BASE_URL = "http://localhost:8080/api";
 
+let currentApplicationId = null;
+let currentCandidateName = null;
+
 async function loadApplications() {
   try {
     const token = localStorage.getItem("token");
@@ -29,9 +32,8 @@ async function loadApplications() {
 
     const applications = await response.json();
 
-    // Filtruj aplikacje gdzie status != HIRED
     const activeApplications = applications.filter(
-      (app) => app.status !== "HIRED",
+      (app) => app.status === "APPLIED" || app.status === "REVIEWING",
     );
 
     if (activeApplications.length === 0) {
@@ -56,7 +58,7 @@ async function loadApplications() {
         </div>
         <div class="application-actions">
           ${app.cvFileName ? `<a href="${API_BASE_URL}/users/${app.userId}/cv" class="btn-small" download>Pobierz CV</a>` : ""}
-          <button class="btn-small hire-btn" onclick="hireCandidate(${app.id}, '${app.firstName} ${app.lastName}')">Zatrudnij</button>
+          <button class="btn-small hire-btn" onclick="openAcceptModal(${app.id}, '${app.firstName} ${app.lastName}')">Akceptuj</button>
         </div>
       </div>
     `,
@@ -69,20 +71,30 @@ async function loadApplications() {
   }
 }
 
-async function hireCandidate(applicationId, candidateName) {
-  if (!confirm(`Czy na pewno chcesz zatrudnić ${candidateName}?`)) {
-    return;
-  }
+function openAcceptModal(applicationId, candidateName) {
+  currentApplicationId = applicationId;
+  currentCandidateName = candidateName;
+  document.getElementById("candidateName").value = candidateName;
+  document.getElementById("acceptModal").style.display = "flex";
+}
+
+function closeAcceptModal() {
+  document.getElementById("acceptModal").style.display = "none";
+  currentApplicationId = null;
+  currentCandidateName = null;
+}
+
+document.getElementById("acceptForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
   try {
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `${API_BASE_URL}/hr/applications/${applicationId}/hire`,
+      `${API_BASE_URL}/hr/applications/${currentApplicationId}/accept`,
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       },
     );
@@ -92,13 +104,14 @@ async function hireCandidate(applicationId, candidateName) {
       throw new Error(error);
     }
 
-    alert("Kandydat został zatrudniony!");
-    loadApplications();
+    alert("Kandydat został zaakceptowany i przesunięty do tablicy Kanban.");
+    closeAcceptModal();
+    window.location.href = "hr-kanban.html";
   } catch (error) {
     console.error("Błąd:", error);
-    alert("Błąd podczas zatrudniania kandydata: " + error.message);
+    alert("Błąd podczas akceptowania kandydata: " + error.message);
   }
-}
+});
 
 function logout() {
   localStorage.removeItem("token");

@@ -9,12 +9,17 @@
   <body>
     <header class="header">
       <nav class="navbar">
-        <div class="logo">HR Platform</div>
+        <div class="logo">
+          <img src="../images/logo.png" alt="Logo HR Platform" />
+        </div>
         <ul class="nav-links">
           <li><a href="index.html">Start</a></li>
           <li><a href="hr-dashboard.html">Panel HR</a></li>
           <li><a href="hr-applications.html">Aplikacje</a></li>
+          <li><a href="hr-kanban.html">Kanban</a></li>
           <li><a href="hr-employees.html">Pracownicy</a></li>
+          <li><a href="hr-job-offers.html">Moje Oferty</a></li>
+          <li><a href="hr-job-offers-archive.html">Archiwum ofert</a></li>
           <li><a href="change-password.html">Zmień hasło</a></li>
           <li><a href="#" id="logoutBtn">Wyloguj</a></li>
         </ul>
@@ -40,9 +45,36 @@
       </section>
     </main>
 
-    <footer class="footer">
-      <p>&copy; 2026 HR Platform. Aplikacje kandydatów.</p>
-    </footer>
+    <!-- Modal do akceptowania kandydata -->
+    <div id="acceptModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeAcceptModal()">&times;</span>
+        <h2>Akceptuj kandydata</h2>
+        <form id="acceptForm">
+          <div class="form-group">
+            <label for="candidateName">Kandydat:</label>
+            <input type="text" id="candidateName" readonly />
+          </div>
+          <p>
+            Po akceptacji kandydat trafi do tablicy Kanban, gdzie możesz
+            przesuwać go między etapami rekrutacji.
+          </p>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeAcceptModal()"
+            >
+              Anuluj
+            </button>
+            <button type="submit" class="btn-primary">
+              Akceptuj i przejdź do Kanban
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script src="../scripts/navbar-anim.js"></script>
     <script src="../scripts/hr-applications.js"></script>
   </body>

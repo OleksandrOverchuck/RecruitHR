@@ -70,6 +70,42 @@ async function loadUserProfile() {
       cvStatus.textContent = "Nie dodano jeszcze CV.";
       downloadCvBtn.style.display = "none";
     }
+
+    // Wyświetl informacje o zaakceptowaniu aplikacji
+    if (data.role === "EMPLOYEE" && data.position && data.salary) {
+      const acceptedCard = document.getElementById("acceptedApplicationCard");
+      acceptedCard.style.display = "block";
+      document.getElementById("acceptedPosition").textContent = data.position;
+      document.getElementById("acceptedSalary").textContent =
+        data.salary.toLocaleString("pl-PL", {
+          style: "decimal",
+          minimumFractionDigits: 2,
+        });
+    }
+
+    // Wyświetlanie informacji o umowie niezależnie od tego, czy użytkownik ma już wpisaną pozycję
+    const contractMessage = document.getElementById("contractMessage");
+    const contractMessageText = document.getElementById("contractMessageText");
+    const downloadContractBtn = document.getElementById("downloadContractBtn");
+    const signContractBtn = document.getElementById("signContractBtn");
+
+    if (data.contractSigned) {
+      contractMessage.style.display = "block";
+      contractMessageText.textContent =
+        "Umowa została podpisana. Możesz ją ponownie pobrać, jeśli zajdzie taka potrzeba.";
+      downloadContractBtn.style.display = "inline-block";
+      signContractBtn.style.display = "none";
+    } else if (data.contractSent && data.contractFileName) {
+      contractMessage.style.display = "block";
+      contractMessageText.textContent =
+        "Masz nową umowę do podpisania. Pobierz dokument i potwierdź podpisanie po zapoznaniu się z treścią.";
+      downloadContractBtn.style.display = "inline-block";
+      signContractBtn.style.display = "inline-block";
+    } else {
+      contractMessage.style.display = "none";
+      downloadContractBtn.style.display = "none";
+      signContractBtn.style.display = "none";
+    }
   } catch (error) {
     console.error("Błąd:", error);
     alert("Sesja wygasła lub nie udało się pobrać danych użytkownika");
@@ -296,6 +332,73 @@ document
     } catch (error) {
       console.error("Błąd pobierania CV:", error);
       alert("Nie udało się pobrać CV");
+    }
+  });
+
+document
+  .getElementById("downloadContractBtn")
+  .addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/users/me/contract",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Nie udało się pobrać umowy");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "umowa.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Błąd pobierania umowy:", error);
+      alert("Nie udało się pobrać umowy");
+    }
+  });
+
+document
+  .getElementById("signContractBtn")
+  .addEventListener("click", async function () {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/users/me/contract/sign",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const result = await response.text();
+
+      if (!response.ok) {
+        throw new Error(result || "Nie udało się podpisać umowy");
+      }
+
+      alert("Umowa została podpisana. HR zostanie powiadomiony.");
+      await loadUserProfile();
+    } catch (error) {
+      console.error("Błąd podpisywania umowy:", error);
+      alert(error.message);
     }
   });
 

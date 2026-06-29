@@ -591,6 +591,69 @@ body {
   word-break: break-word;
 }
 
+.offer-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: flex-start;
+}
+
+.offer-details {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.offer-details p {
+  margin: 10px 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.offer-details strong {
+  color: #0f172a;
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.offer-description {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 3px solid #3b82f6;
+}
+
+.offer-details-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.offer-actions button {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-offer-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.edit-offer-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
 /* Also ensure grid items don't cause horizontal overflow */
 .offers-grid {
   display: grid;
@@ -899,6 +962,238 @@ body {
     z-index: 1001;
   }
 
+  /* Modal styles for accept form */
+  #acceptModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+  }
+
+  #acceptModal.show {
+    display: flex;
+  }
+
+  #acceptModal .modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(2, 6, 23, 0.35);
+  }
+
+  .close-modal {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #64748b;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .close-modal:hover {
+    color: #0f172a;
+  }
+
+  #acceptModal h2 {
+    margin-bottom: 20px;
+    color: #0f172a;
+    font-size: 22px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0f172a;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  .form-actions button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-secondary {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  .btn-secondary:hover {
+    background: #e2e8f0;
+  }
+}
+
+.kanban-page {
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.kanban-page h1 {
+  font-size: 32px;
+  margin-bottom: 24px;
+}
+
+.kanban-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.kanban-column {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 250px;
+  min-width: 250px;
+  max-width: calc(25% - 15px);
+}
+
+.kanban-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 260px;
+}
+
+.kanban-column h2 {
+  font-size: 18px;
+  margin: 0 0 12px;
+  color: #0f172a;
+}
+
+.kanban-column.drag-over {
+  background: #e2e8f0;
+}
+
+.kanban-card {
+  background: white;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  cursor: grab;
+}
+
+.kanban-card.dragging {
+  opacity: 0.6;
+}
+
+.kanban-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.kanban-card p {
+  margin: 6px 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+.kanban-card .card-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.kanban-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-accepted {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status-interview {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.status-contract_signing {
+  background: #dcfce7;
+  color: #14532d;
+}
+
+.status-hired {
+  background: #d1fae5;
+  color: #166534;
+}
+
+.status-applied,
+.status-reviewing {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+@media (max-width: 768px) {
   .nav-links {
     position: absolute;
     top: 100%;

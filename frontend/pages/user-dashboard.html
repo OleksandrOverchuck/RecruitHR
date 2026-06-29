@@ -101,6 +101,86 @@
           </div>
         </div>
 
+        <div
+          class="dashboard-card"
+          id="acceptedApplicationCard"
+          style="display: none"
+        >
+          <h2>Zaakceptowana aplikacja</h2>
+          <div class="accepted-info">
+            <p
+              style="
+                color: #166534;
+                margin-bottom: 16px;
+                padding: 12px;
+                background: #dcfce7;
+                border-radius: 8px;
+                font-weight: 600;
+              "
+            >
+              ✓ Twoja aplikacja została zaakceptowana!
+            </p>
+            <p>
+              <strong>Stanowisko:</strong>
+              <span id="acceptedPosition">Ładowanie...</span>
+            </p>
+            <p>
+              <strong>Zarobki (PLN):</strong>
+              <span id="acceptedSalary">Ładowanie...</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Wiadomości</h2>
+          <div
+            id="messagesPanel"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              max-height: 320px;
+              overflow-y: auto;
+            "
+          >
+            <div
+              id="contractMessage"
+              style="
+                display: none;
+                border: 1px solid #dbeafe;
+                background: #eff6ff;
+                border-radius: 10px;
+                padding: 14px;
+              "
+            >
+              <p style="margin: 0 0 8px; font-weight: 600">
+                Umowa do podpisania
+              </p>
+              <p id="contractMessageText" style="margin: 0 0 10px">
+                Otrzymałeś dokument do podpisania.
+              </p>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="#"
+                  class="dashboard-btn secondary-btn"
+                  id="downloadContractBtn"
+                  style="display: none"
+                >
+                  Pobierz PDF
+                </a>
+                <button
+                  type="button"
+                  class="dashboard-btn"
+                  id="signContractBtn"
+                  style="display: none"
+                >
+                  Potwierdzam podpisanie
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="dashboard-card">
           <h2>Moje CV</h2>
           <p class="muted-text" id="cvStatus">
@@ -176,10 +256,6 @@
         </div>
       </section>
     </main>
-
-    <footer class="footer">
-      <p>&copy; 2026 HR Platform. Projekt systemu HR i rekrutacji.</p>
-    </footer>
     <script src="../scripts/navbar-anim.js"></script>
     <script src="../scripts/user-dashboard.js"></script>
   </body>

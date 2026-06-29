@@ -8,4 +8,5 @@ import com.backend.entity.JobApplication;
 
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
     List<JobApplication> findByUserId(Long userId);
+    void deleteByJobOfferId(Long jobOfferId);
 }

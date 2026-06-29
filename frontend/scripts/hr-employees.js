@@ -1,9 +1,24 @@
 const employeesList = document.getElementById("employeesList");
 const logoutBtn = document.getElementById("logoutBtn");
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const clearSearchBtn = document.getElementById("clearSearchBtn");
 
 const API_BASE_URL = "http://localhost:8080/api";
+let hiredEmployees = [];
 
-async function loadEmployees() {
+searchBtn?.addEventListener("click", () => {
+  loadEmployees(searchInput.value.trim());
+});
+
+clearSearchBtn?.addEventListener("click", () => {
+  if (searchInput) {
+    searchInput.value = "";
+  }
+  loadEmployees();
+});
+
+async function loadEmployees(query = "") {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -31,21 +46,33 @@ async function loadEmployees() {
 
     // Filtruj aplikacje gdzie status == HIRED
     const hiredEmployees = applications.filter((app) => app.status === "HIRED");
+    const normalizedQuery = query.trim().toLowerCase();
 
-    if (hiredEmployees.length === 0) {
+    const filteredEmployees = normalizedQuery
+      ? hiredEmployees.filter((employee) => {
+          const name = `${employee.firstName}`.toLowerCase();
+          const indexNumber = `${employee.indexNumber || ""}`.toLowerCase();
+          return (
+            name.includes(normalizedQuery) ||
+            indexNumber.includes(normalizedQuery)
+          );
+        })
+      : hiredEmployees;
+
+    if (filteredEmployees.length === 0) {
       employeesList.innerHTML =
         '<p style="grid-column: 1 / -1; text-align: center;">Brak zatrudnionych pracowników</p>';
       return;
     }
 
     // Sortuj pracowników po nazwisku
-    hiredEmployees.sort((a, b) => {
+    filteredEmployees.sort((a, b) => {
       const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
       return nameA.localeCompare(nameB);
     });
 
-    employeesList.innerHTML = hiredEmployees
+    employeesList.innerHTML = filteredEmployees
       .map(
         (employee) => `
       <div class="employee-card">

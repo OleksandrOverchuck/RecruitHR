@@ -33,6 +33,7 @@ import com.backend.dto.UpdateProfileRequest;
 import com.backend.dto.UserResponse;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
+import com.backend.service.ContractService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ContractService contractService;
 
     private static final String UPLOADS_DIR = "uploads";
     private final String cvUploadDir = UPLOADS_DIR + File.separator + "cv";
@@ -70,6 +72,11 @@ public class UserController {
                 .role(user.getRole().name())
                 .cvFileName(user.getCvFileName())
                 .profileImageName(user.getProfileImageName())
+                .position(user.getPosition())
+                .salary(user.getSalary())
+                .contractFileName(user.getContractFileName())
+                .contractSent(user.getContractSent())
+                .contractSigned(user.getContractSigned())
                 .build();
     }
 
@@ -311,6 +318,55 @@ public class UserController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + user.getCvFileName() + "\"")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
+    }
+
+    @GetMapping("/me/contract")
+    public ResponseEntity<Resource> downloadContract(Authentication authentication) throws MalformedURLException {
+        if (authentication == null || authentication.getName() == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Użytkownik nie znaleziony"));
+
+        if (user.getContractFileName() == null || user.getContractFileName().isBlank()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Path filePath = Paths.get(contractService.getStorageDirectory()).resolve(user.getContractFileName());
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + user.getContractFileName() + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
+    }
+
+    @PostMapping("/me/contract/sign")
+    public ResponseEntity<String> signContract(Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            return ResponseEntity.status(401).body("Brak autoryzacji");
+        }
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Użytkownik nie znaleziony"));
+
+        if (user.getContractFileName() == null || user.getContractFileName().isBlank()) {
+            return ResponseEntity.badRequest().body("Brak wygenerowanej umowy do podpisania");
+        }
+
+        user.setContractSigned(true);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Umowa została podpisana");
     }
 
     @PutMapping("/change-password")
